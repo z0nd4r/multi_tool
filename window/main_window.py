@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from . import NumberSystems, RegularCalculator
+from . import NumberSystems, RegularCalculator, ImageConverter
 
 class MainWindow:
     def __init__(self):
@@ -22,8 +22,12 @@ class MainWindow:
         self.main_window.resizable(False, False) # запрет изменения размеров окна
 
         self._build_notebook()
-        self._build_combo()
+        self._build_converter_frame()
         self._build_calculator_frame()
+
+        self._build_combo_calculator()
+        self._build_combo_converter()
+
         self._build_style()
 
     # создание вкладок
@@ -38,42 +42,72 @@ class MainWindow:
         self.frame_2.pack(fill='both', expand=True)
 
         self.notebook.add(self.frame_1, text="Калькулятор")
-        self.notebook.add(self.frame_2, text="Конвертер форматов")
+        self.notebook.add(self.frame_2, text="Конвертер")
 
-    def _build_combo(self):
-        self.combo = ttk.Combobox(self.frame_1, values=["Обычный", "Системы счисления"])  # Выпадающий список
-        self.combo.insert(0, "Выберите калькулятор")  # Плейсхолдер
+    # выпадающий список
+    def _build_combo(self, frame_top, values, value, frame_down):
+        self.combo = ttk.Combobox(frame_top, values=values)  # Выпадающий список
+        self.combo.insert(0, value)  # Плейсхолдер
         self.combo.config(foreground="black")
 
-        self.combo.bind("<FocusIn>", self.on_focus_in)
-        self.combo.bind("<FocusOut>", self.on_focus_out)
-        self.combo.bind("<<ComboboxSelected>>", self._on_calculator_change)
+        self.combo.bind("<FocusIn>", lambda event: self.on_focus_in(event, value))
+        self.combo.bind("<FocusOut>", lambda event: self.on_focus_out(event, value))
+        self.combo.bind("<<ComboboxSelected>>", lambda event: self._on_change(event, frame_down))
         self.combo.pack(fill="x", padx=10, pady=(0, 10))
 
-    def on_focus_in(self, event):
-        if self.combo.get() == "Выберите калькулятор":
+        return self.combo
+
+    # выпадающий список для калькуляторов
+    def _build_combo_calculator(self):
+        values = ["Обычный", "Системы счисления"]
+        value = 'Выберите калькулятор'
+        self.combo_calculator = self._build_combo(self.frame_1, values, value, self.calculator_frame)
+
+    def _build_combo_converter(self):
+        values = ['Изображения', 'Текстовые файлы']
+        value = 'Выберите конвертер'
+        self.combo_converter = self._build_combo(self.frame_2, values, value, self.converter_frame)
+
+    def on_focus_in(self, event, value):
+        if self.combo.get() == value:
             self.combo.delete(0, "end")
             self.combo.config(foreground="black")
 
-    def on_focus_out(self, event):
+    def on_focus_out(self, event, value):
         if not self.combo.get():
-            self.combo.insert(0, "Выберите калькулятор")
+            self.combo.insert(0, value)
             self.combo.config(foreground="grey")
 
     def _build_calculator_frame(self):
         self.calculator_frame = tk.Frame(self.frame_1)
-        self.calculator_frame.pack(fill="both", expand=True)
+        self.calculator_frame.pack(side='bottom', fill="both", expand=True)
 
-    def _on_calculator_change(self, event):
-        for widget in self.calculator_frame.winfo_children():
+    def _build_converter_frame(self):
+        self.converter_frame = tk.Frame(self.frame_2)
+        self.converter_frame.pack(side='bottom', fill="both", expand=True)
+
+    def _on_change(self, event, frame):
+        for widget in frame.winfo_children():
             widget.destroy()
 
-        choice = self.combo.get()
+        selected_tab_index = self.notebook.index("current")
+
+        if selected_tab_index == 0:
+            combo = self.combo_calculator
+        elif selected_tab_index == 1:
+            combo = self.combo_converter
+
+        choice = combo.get()
+        print(choice)
         if choice == "Обычный":
             pass
             # RegularCalculator(self.calculator_frame)
         elif choice == "Системы счисления":
             NumberSystems(self.calculator_frame)
+        elif choice == 'Изображения':
+            ImageConverter(self.converter_frame)
+
+    # все для конвертера изображений
 
     def _build_style(self):
         style = ttk.Style()
