@@ -22,8 +22,8 @@ class MainWindow:
         self.main_window.resizable(False, False) # запрет изменения размеров окна
 
         self._build_notebook()
-        self._build_converter_frame()
         self._build_calculator_frame()
+        self._build_converter_frame()
 
         self._build_combo_calculator()
         self._build_combo_converter()
@@ -46,8 +46,12 @@ class MainWindow:
 
     # выпадающий список
     def _build_combo(self, frame_top, values, value, frame_down):
-        self.combo = ttk.Combobox(frame_top, values=values)  # Выпадающий список
-        self.combo.insert(0, value)  # Плейсхолдер
+        self.combo = ttk.Combobox(frame_top, values=values)  # Выпадающий список4
+        if value == 0:
+            self.combo.insert(45, 'Выберите калькулятор')  # Плейсхолдер
+        elif value == 1:
+            self.combo.insert(45, 'Выберите конвертер')  # Плейсхолдер
+
         self.combo.config(foreground="black")
 
         self.combo.bind("<FocusIn>", lambda event: self.on_focus_in(event, value))
@@ -60,12 +64,12 @@ class MainWindow:
     # выпадающий список для калькуляторов
     def _build_combo_calculator(self):
         values = ["Обычный", "Системы счисления"]
-        value = 'Выберите калькулятор'
+        value = 0
         self.combo_calculator = self._build_combo(self.frame_1, values, value, self.calculator_frame)
 
     def _build_combo_converter(self):
-        values = ['Изображения', 'Текстовые файлы']
-        value = 'Выберите конвертер'
+        values = ["Изображения", "Текстовые файлы"]
+        value = 1
         self.combo_converter = self._build_combo(self.frame_2, values, value, self.converter_frame)
 
     def on_focus_in(self, event, value):
