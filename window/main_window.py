@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from . import NumberSystems, RegularCalculator, ImageConverter
 
+
 class MainWindow:
     def __init__(self):
         # Конфигурация приложения
@@ -82,11 +83,11 @@ class MainWindow:
             self.combo.config(foreground="grey")
 
     def _build_converter_frame(self):
-        self.converter_frame = tk.Frame(self.frame_1)
+        self.converter_frame = ttk.Frame(self.frame_1)
         self.converter_frame.pack(side='bottom', fill="both", expand=True)
 
     def _build_calculator_frame(self):
-        self.calculator_frame = tk.Frame(self.frame_2)
+        self.calculator_frame = ttk.Frame(self.frame_2)
         self.calculator_frame.pack(side='bottom', fill="both", expand=True)
 
     def _on_change(self, event, frame):
@@ -101,7 +102,7 @@ class MainWindow:
             combo = self.combo_calculator
 
         choice = combo.get()
-        print(choice)
+        # print(choice)
         if choice == "Обычный":
             pass
             # RegularCalculator(self.calculator_frame)
