@@ -13,7 +13,7 @@ class ImageConverter:
         self.output_path = tk.StringVar()
         self.output_path_name = tk.StringVar()
 
-        formats = ["PNG", "JPEG", "WebP"]
+        formats = ["PNG", "JPEG", "WebP", "GIF"]
 
         ttk.Label(parent, text="Выберите изображение:").grid(row=0, column=0, sticky=W+E,  padx=15, pady=5)
         ttk.Button(parent, text="Обзор", command=self._browse_file).grid(row=0, column=1, sticky=E, padx=15, pady=5)
@@ -38,7 +38,7 @@ class ImageConverter:
     def _browse_file(self):
         filename = filedialog.askopenfilename(initialdir='.',
                                               title='Выберите изображение',
-                                              filetypes=(("Image files", "*.png *.jpg *.jpeg *.bmp *.gif *.JPG *.JPEG"),
+                                              filetypes=(("Image files", "*.png *.jpg *.jpeg *.bmp *.gif *.webp *.gif *.JPG *.JPEG"),
                                                          ("all files", "*.*")))
         print(f"Результат filedialog: {filename}")
         if filename:
