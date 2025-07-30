@@ -15,20 +15,24 @@ class ImageConverter:
 
         formats = ["PNG", "JPEG", "WebP"]
 
-        ttk.Label(parent, text="Выберите изображение:").grid(row=0, column=0, sticky=W+E, padx=15, pady=5)
-        ttk.Button(parent, text="Обзор", command=self._browse_file).grid(row=0, column=1, sticky=E+W, padx=10, pady=5)
-        ttk.Label(parent, width=5, textvariable=self.file_name).grid(row=1, column=1, sticky=E+W, padx=10, pady=1)
+        ttk.Label(parent, text="Выберите изображение:").grid(row=0, column=0, sticky=W+E,  padx=15, pady=5)
+        ttk.Button(parent, text="Обзор", command=self._browse_file).grid(row=0, column=1, sticky=E, padx=15, pady=5)
+        ttk.Label(parent, width=5, textvariable=self.file_name).grid(row=1, column=1, sticky=W+E, padx=15, pady=1)
 
         ttk.Label(parent, text="Выберите папку для \nсохранения:").grid(row=2, column=0, sticky=W+E, padx=15, pady=5)
-        ttk.Button(parent, text="Обзор", command=self._browse_output_dir).grid(row=2, column=1, sticky=E+W, padx=10, pady=5)
-        ttk.Label(parent, width=5, textvariable=self.output_path_name).grid(row=3, column=1, sticky=E+W, padx=10, pady=1)
+        ttk.Button(parent, text="Обзор", command=self._browse_output_dir).grid(row=2, column=1, sticky=E, padx=15, pady=5)
+        ttk.Label(parent, width=5, textvariable=self.output_path_name).grid(row=3, column=1, sticky=W+E, padx=15, pady=1)
 
         ttk.Label(parent, text='Конвертировать в').grid(row=4, column=0, sticky=W+E, padx=15, pady=5)
         self.combo = ttk.Combobox(parent, width=5, values=formats)
-        self.combo.grid(row=4, column=1, sticky=W+E, padx=10, pady=5)
+        self.combo.grid(row=4, column=1, sticky=W+E, padx=15, pady=5)
+
+        # button_frame = ttk.Frame(parent)
+        # button_frame.grid(row=5, columnspan=2, padx=15, pady=10)
         ttk.Button(parent, text="Конвертировать", command=lambda: convert_image(self.combo,
                                                                                 self.file_path,
-                                                                                self.output_path)).grid(columnspan=2, padx=5, pady=10)
+                                                                                self.output_path)).grid(row=5, columnspan=2, padx=15, pady=10)
+        # convert_button.pack()
 
     # открывает диалоговое окно для выбора файла изображения
     def _browse_file(self):
