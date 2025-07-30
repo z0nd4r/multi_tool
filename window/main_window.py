@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from . import NumberSystems, RegularCalculator, ImageConverter
+from . import NumberSystems, ImageConverter
 
 
 class MainWindow:
@@ -8,8 +8,10 @@ class MainWindow:
         # Конфигурация приложения
         self.main_window = tk.Tk()
 
+        self.main_window.tk.call('tk', 'scaling', 1.5)
+
         self.title = "Multi Tool"
-        self.width = 300
+        self.width = 324
         self.height = 400
 
         # Инициализация окна
@@ -58,7 +60,7 @@ class MainWindow:
         self.combo.bind("<FocusIn>", lambda event: self.on_focus_in(event, value))
         self.combo.bind("<FocusOut>", lambda event: self.on_focus_out(event, value))
         self.combo.bind("<<ComboboxSelected>>", lambda event: self._on_change(event, frame_down))
-        self.combo.pack(fill="x", padx=10, pady=(0, 10))
+        self.combo.pack(fill="x", padx=10, pady=(5, 10))
 
         return self.combo
 
