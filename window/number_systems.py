@@ -13,31 +13,31 @@ class NumberSystems:
 
     def _create_interface(self):
         # главный фрейм
-        self.main_frame = tk.Frame(self.root)
+        self.main_frame = ttk.Frame(self.root)
         self.main_frame.pack(padx=10, pady=10)
 
         check_1 = (self.root.register(self.is_valid_1), "%P")
         check_2 = (self.root.register(self.is_valid_2), "%P")
 
         # фрейм для первого числа и выпадающего списка
-        self.frame_1 = tk.Frame(self.main_frame)
+        self.frame_1 = ttk.Frame(self.main_frame)
         self.frame_1.pack(fill='x')
 
-        tk.Label(self.frame_1, text=" Перевести число").pack()
-        self.number_entry_1 = tk.Entry(self.frame_1,
+        ttk.Label(self.frame_1, text=" Перевести число").pack()
+        self.number_entry_1 = ttk.Entry(self.frame_1,
                                        validate="key",
                                        validatecommand=check_1)
         self.number_entry_1.pack()
 
-        tk.Label(self.frame_1, text="из десятичной").pack()
+        ttk.Label(self.frame_1, text="из десятичной").pack()
         # self.combo_1 = ttk.Combobox(self.frame_1, values=self.lst)
         # self.combo_1.pack()
 
-        # фрейм для второго выпадаюзего списка
-        self.frame_2 = tk.Frame(self.main_frame)
+        # фрейм для второго выпадающего списка
+        self.frame_2 = ttk.Frame(self.main_frame)
         self.frame_2.pack(fill='x')
 
-        tk.Label(self.frame_2, text="в").pack()
+        ttk.Label(self.frame_2, text="в").pack()
         self.combo_2 = ttk.Combobox(self.frame_2,
                                     values=self.lst,
                                     validate="key",
@@ -46,16 +46,16 @@ class NumberSystems:
         self.combo_2.pack()
 
         # фрейм для результата
-        self.frame_3 = tk.Frame(self.main_frame)
+        self.frame_3 = ttk.Frame(self.main_frame)
         self.frame_3.pack(fill='x')
 
-        tk.Label(self.frame_3, text="Результат:").pack()
-        self.number_entry_2 = tk.Entry(self.frame_3)
+        ttk.Label(self.frame_3, text="Результат:").pack()
+        self.number_entry_2 = ttk.Entry(self.frame_3)
         self.number_entry_2.pack()
 
-        btn_frame = tk.Frame(self.main_frame)
+        btn_frame = ttk.Frame(self.main_frame)
         btn_frame.pack(pady=10)
-        tk.Button(btn_frame, text="Конвертировать",
+        ttk.Button(btn_frame, text="Конвертировать",
                   command=lambda: self.show_conversion_result()).pack()
 
     def is_valid_1(self, newval):
@@ -65,6 +65,10 @@ class NumberSystems:
         return re.match(r'^\d{0,2}$', newval) is not None
 
     def show_conversion_result(self):
+        if self.combo_2.get() == "":
+            messagebox.showerror("Ошибка", f"Не все числа введены")
+            return
+
         if int(self.combo_2.get()) > 16:
             messagebox.showerror("Ошибка", f"Введите систему счисления не больше 16")
             return
