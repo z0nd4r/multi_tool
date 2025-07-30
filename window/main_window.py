@@ -2,7 +2,7 @@ import tkinter as tk
 import tkinter.font as font
 from tkinter import ttk
 
-from . import NumberSystems, ImageConverter
+from . import NumberSystems, ImageConverter, Menu
 
 
 class MainWindow:
@@ -21,6 +21,8 @@ class MainWindow:
 
         # Инициализация окна
         self._build_main_window()
+
+        Menu(self.main_window, self.notebook)
 
         tk.mainloop()
 
