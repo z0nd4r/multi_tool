@@ -1,17 +1,20 @@
 import tkinter as tk
 from tkinter import ttk
 from . import NumberSystems, ImageConverter
-
+import tkinter.font as font
 
 class MainWindow:
     def __init__(self):
         # Конфигурация приложения
         self.main_window = tk.Tk()
 
-        self.main_window.tk.call('tk', 'scaling', 1.5)
+        # self.main_window.tk.call('tk', 'scaling', 1)
+
+        self.default_font = font.nametofont("TkDefaultFont")
+        self.default_font.configure(size=10)
 
         self.title = "Multi Tool"
-        self.width = 324
+        self.width = 300
         self.height = 400
 
         # Инициализация окна
@@ -115,6 +118,6 @@ class MainWindow:
 
     def _build_style(self):
         style = ttk.Style()
-        style.configure("TLabel", font=("Arial", 10))
+        style.configure("TLabel", font=self.default_font)
         style.configure("TCombobox", padding=5)
 
