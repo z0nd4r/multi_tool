@@ -65,12 +65,11 @@ class NumberSystems:
         return re.match(r'^\d{0,2}$', newval) is not None
 
     def show_conversion_result(self):
-        if self.combo_2.get() == "":
+        if self.combo_2.get() == "" or self.number_entry_1.get() == "":
             messagebox.showerror("Ошибка", f"Не все числа введены")
             return
-
-        if int(self.combo_2.get()) > 16:
-            messagebox.showerror("Ошибка", f"Введите систему счисления не больше 16")
+        elif int(self.combo_2.get()) > 16 or int(self.combo_2.get()) < 1:
+            messagebox.showerror("Ошибка", f"Введите систему счисления не больше 16 и не меньше 1")
             return
 
         try:
@@ -87,7 +86,7 @@ class NumberSystems:
             self.number_entry_2.config(state='readonly')
 
         except ValueError as e:
-            messagebox.showerror("Ошибка", f"Не все числа введены")
+            messagebox.showerror("Ошибка", f"Не все числа введены или вы ввели число меньше 1")
 
 
 
