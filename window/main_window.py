@@ -1,7 +1,9 @@
 import tkinter as tk
-from tkinter import ttk
-from . import NumberSystems, ImageConverter
 import tkinter.font as font
+from tkinter import ttk
+
+from . import NumberSystems, ImageConverter
+
 
 class MainWindow:
     def __init__(self):
@@ -52,7 +54,7 @@ class MainWindow:
 
     # выпадающий список
     def _build_combo(self, frame_top, values, value, frame_down):
-        self.combo = ttk.Combobox(frame_top, values=values)  # Выпадающий список
+        self.combo = ttk.Combobox(frame_top, values=values, font=self.default_font)  # Выпадающий список
         if value == 0:
             self.combo.insert(45, 'Выберите калькулятор')  # Плейсхолдер
         elif value == 1:
