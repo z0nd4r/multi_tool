@@ -4,6 +4,7 @@ from tkinter import ttk, messagebox
 
 from config import Convert
 
+
 class NumberSystems:
     def __init__(self, parent):
         self.root = parent
