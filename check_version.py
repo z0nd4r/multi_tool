@@ -24,12 +24,12 @@ def update_app(parent):
         bat_path = os.path.join(os.getenv("TEMP"), "update.bat")
         current_exe = sys.argv[0]
 
-        # Скачиваем новый файл
+        # скачиваем новый файл
         with requests.get(exe_url, stream=True) as f:
             with open(temp_path, "wb") as out:
                 out.write(f.content)
 
-        # Создаём BAT-файл
+        # создаём BAT-файл
         bat_script = f"""
         @echo off
         timeout /t 2 /nobreak
