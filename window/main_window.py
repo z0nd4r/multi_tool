@@ -19,6 +19,10 @@ class MainWindow:
         self.width = 300
         self.height = 400
 
+        # получаем ширину и высоту экрана
+        self.ws = self.main_window.winfo_screenwidth()
+        self.hs = self.main_window.winfo_screenheight()
+
         # Инициализация окна
         self._build_main_window()
 
@@ -27,8 +31,11 @@ class MainWindow:
         tk.mainloop()
 
     def _build_main_window(self):
+        x = (self.ws / 2) - (self.width / 2)
+        y = (self.hs / 2) - (self.height / 2)
+
         self.main_window.title(self.title)
-        self.main_window.geometry(f"{self.width}x{self.height}")
+        self.main_window.geometry('%dx%d+%d+%d' % (self.width, self.height, x, y)) # окно появляется посередине
         self.main_window.resizable(False, False) # запрет изменения размеров окна
 
         self._build_notebook()
