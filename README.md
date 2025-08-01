@@ -1,7 +1,10 @@
-### 'Multi Tool' app
+## Multi Tool
 
-**Calculators:**
-- Number systems
+**Функции:**
+- Конвертация изображений
 
-**Converter**
-- Image converter 
+  Поддерживаемые исходные форматы: png, jpeg, webp, gif, jpg, bmp  
+  Поддерживаемые выводимые форматы: png, jpeg, webp, gif
+
+- Калькулятор систем счисления
+  Перевод чисел из десятичной системы в любую другую (от 1 до 16)
