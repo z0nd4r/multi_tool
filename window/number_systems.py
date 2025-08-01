@@ -1,6 +1,6 @@
 import re
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, W, E, N, S
 
 from config import Convert
 
@@ -55,9 +55,22 @@ class NumberSystems:
         self.number_entry_2.pack()
 
         btn_frame = ttk.Frame(self.main_frame)
-        btn_frame.pack(pady=10)
+        btn_frame.pack(fill='x', pady=15)
+
         ttk.Button(btn_frame, text="Конвертировать",
-                  command=lambda: self.show_conversion_result()).pack()
+                   command=self.show_conversion_result).pack(side='left', padx=(81, 7), expand=True)
+        ttk.Button(btn_frame, text="Сменить").pack(side='right')
+
+        # ttk.Button(btn_frame, text="Конвертировать",
+        #            command=self.show_conversion_result).grid(row=0, column=0, sticky=E, padx=(0, 10))
+        # ttk.Button(btn_frame, text="Сменить").grid(row=0, column=1, sticky=E)
+
+        # btn_frame.columnconfigure(0, weight=1)
+        # btn_frame.columnconfigure(1, weight=0)
+
+
+
+
 
     def is_valid_1(self, newval):
         return re.match(r'^\d*$', newval) is not None
@@ -70,7 +83,7 @@ class NumberSystems:
             messagebox.showerror("Ошибка", f"Не все числа введены")
             return
         elif int(self.combo_2.get()) > 16 or int(self.combo_2.get()) < 1:
-            messagebox.showerror("Ошибка", f"Введите систему счисления не больше 16 и не меньше 1")
+            messagebox.showerror("Ошибка", f"Введите систему счисления не меньше 1 и не больше 16")
             return
 
         try:
