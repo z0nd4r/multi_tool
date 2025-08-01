@@ -16,15 +16,18 @@ class ImageConverter:
 
         formats = ["PNG", "JPEG", "WebP", "GIF"]
 
-        ttk.Label(parent, text="Выберите изображение:").grid(row=0, column=0, sticky=W+E,  padx=15, pady=5)
+        # ttk.Label(parent, text="Выберите изображение:").grid(row=0, column=0, sticky=W+E,  padx=15, pady=5) # windows
+        ttk.Label(parent, text="Выберите изображение:").grid(row=0, column=0, sticky=W+E,  padx=11, pady=5) # linux
         ttk.Button(parent, text="Обзор", command=self._browse_file).grid(row=0, column=1, sticky=E, padx=15, pady=5)
         ttk.Label(parent, width=5, textvariable=self.file_name).grid(row=1, column=1, sticky=W+E, padx=15, pady=1)
 
-        ttk.Label(parent, text="Выберите папку для \nсохранения:").grid(row=2, column=0, sticky=W+E, padx=15, pady=5)
+        # ttk.Label(parent, text="Выберите папку для \nсохранения:").grid(row=2, column=0, sticky=W+E, padx=15, pady=5) # windows
+        ttk.Label(parent, text="Выберите папку для \nсохранения:").grid(row=2, column=0, sticky=W+E, padx=11, pady=5) # linux
         ttk.Button(parent, text="Обзор", command=self._browse_output_dir).grid(row=2, column=1, sticky=E, padx=15, pady=5)
         ttk.Label(parent, width=5, textvariable=self.output_path_name).grid(row=3, column=1, sticky=W+E, padx=15, pady=1)
 
-        ttk.Label(parent, text='Конвертировать в').grid(row=4, column=0, sticky=W+E, padx=15, pady=5)
+        # ttk.Label(parent, text='Конвертировать в').grid(row=4, column=0, sticky=W+E, padx=15, pady=5) # windows
+        ttk.Label(parent, text='Конвертировать в').grid(row=4, column=0, sticky=W+E, padx=11, pady=5) # linux
         self.combo = ttk.Combobox(parent, width=5, values=formats)
         self.combo.grid(row=4, column=1, sticky=W+E, padx=15, pady=5)
 
@@ -39,8 +42,8 @@ class ImageConverter:
     def _browse_file(self):
         filename = filedialog.askopenfilename(initialdir='.',
                                               title='Выберите изображение',
-                                              filetypes=(("Image files", "*.png *.jpg *.jpeg *.bmp *.gif *.webp *.gif *.JPG *.JPEG"),
-                                                         ("all files", "*.*")))
+                                              filetypes=(("Image files", "*.png *.jpg *.jpeg *.bmp *.gif *.webp *.JPG *.JPEG"),
+                                                         ("All files", "*.*")))
         print(f"Результат filedialog: {filename}")
         if filename:
             self.file_path.set(filename)
