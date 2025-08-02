@@ -69,24 +69,32 @@ class NumberSystems:
         btn_frame = ttk.Frame(self.main_frame)
         btn_frame.pack(fill='x', pady=15)
 
-        large_button_font = font.Font(family="Arial", size=14, weight="bold")
+        # linux
+        # large_button_font = font.Font(family="Arial", size=14, weight="bold")
+        # s = ttk.Style()
+        # s.configure('BigArrow.TButton',
+        #             font=large_button_font,
+        #             width=2,
+        #             height=2,
+        #             padding=[2, 2, 2, 1.9]) # стиль для кнопки со стрелками
+        #
+        # ttk.Button(btn_frame, text="Конвертировать",
+        #            command=self.show_conversion_result).pack(side='left', padx=(37, 7), expand=True)
+        # ttk.Button(btn_frame, text="⮀", style='BigArrow.TButton', command=self._change_calculator).pack(side='right')
+
+        # windows
+        large_button_font = font.Font(family="Arial", size=13, weight="bold")
         s = ttk.Style()
         s.configure('BigArrow.TButton',
                     font=large_button_font,
                     width=2,
                     height=2,
-                    padding=[2, 2, 2, 1.9]) # стиль для кнопки со стрелками
+                    padding=[0.2, 0.2, 0.2, 0.2]) # стиль для кнопки со стрелками
 
         ttk.Button(btn_frame, text="Конвертировать",
-                   command=self.show_conversion_result).pack(side='left', padx=(37, 7), expand=True)
+                   command=self.show_conversion_result).pack(side='left', padx=(33, 7), expand=True)
         ttk.Button(btn_frame, text="⮀", style='BigArrow.TButton', command=self._change_calculator).pack(side='right')
 
-        # ttk.Button(btn_frame, text="Конвертировать",
-        #            command=self.show_conversion_result).grid(row=0, column=0, sticky=E, padx=(0, 10))
-        # ttk.Button(btn_frame, text="Сменить").grid(row=0, column=1, sticky=E)
-
-        # btn_frame.columnconfigure(0, weight=1)
-        # btn_frame.columnconfigure(1, weight=0)
 
     def is_valid_1(self, newval):
         return re.match(r'^\d*$', newval) is not None
