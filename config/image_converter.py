@@ -9,7 +9,7 @@ def convert_image(combo, file_path, output_path):
     choice = combo.get()
 
     if not input_file or not output_dir:
-        messagebox.showerror("Ошибка", "Пожалуйста, выберите изображение и папку для сохранения.")
+        messagebox.showerror("Ошибка", "Пожалуйста, выберите изображение и папку для сохранения")
     else:
         try:
             image = Image.open(input_file)
