@@ -20,4 +20,4 @@ def convert_image(combo, file_path, output_path):
             messagebox.showinfo("Успех", f"Изображение сохранено как {output_file}")
 
         except Exception as e:
-            messagebox.showerror("Ошибка", f"Произошла ошибка: {e}")
+            messagebox.showerror("Ошибка", f"Выберите поддерживаемый формат изображения")
