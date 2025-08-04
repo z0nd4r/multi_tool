@@ -7,7 +7,7 @@ import subprocess
 from tkinter import messagebox
 
 GITHUB_API = "https://api.github.com/repos/z0nd4r/multi_tool/releases/latest"
-CURRENT_VERSION = "v1.1.1"
+CURRENT_VERSION = "v1.2.0"
 
 def update_app(parent):
     try:
