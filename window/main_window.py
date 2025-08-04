@@ -4,20 +4,24 @@ from tkinter import ttk
 
 from . import NumberSystems, ImageConverter, Menu
 
+import ctypes
+
+
 
 class MainWindow:
     def __init__(self):
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
         # Конфигурация приложения
         self.main_window = tk.Tk()
 
-        # self.main_window.tk.call('tk', 'scaling', 1)
+        self.main_window.tk.call('tk', 'scaling', 2)
 
         self.default_font = font.nametofont("TkDefaultFont")
         self.default_font.configure(size=10)
 
         self.title = "Multi Tool"
-        self.width = 300
-        self.height = 400
+        self.width = 450
+        self.height = 550
 
         # получаем ширину и высоту экрана
         self.ws = self.main_window.winfo_screenwidth()
@@ -36,7 +40,7 @@ class MainWindow:
 
         self.main_window.title(self.title)
         self.main_window.geometry('%dx%d+%d+%d' % (self.width, self.height, x, y)) # окно появляется посередине
-        self.main_window.resizable(False, False) # запрет изменения размеров окна
+        # self.main_window.resizable(False, False) # запрет изменения размеров окна
 
         self._build_notebook()
         self._build_converter_frame()
@@ -63,11 +67,11 @@ class MainWindow:
 
     # выпадающий список
     def _build_combo(self, frame_top, values, value, frame_down):
-        self.combo = ttk.Combobox(frame_top, values=values, font=self.default_font)  # Выпадающий список
+        self.combo = ttk.Combobox(frame_top, values=values, font=self.default_font, state="readonly")  # Выпадающий список
         if value == 0:
-            self.combo.insert(45, 'Выберите калькулятор')  # Плейсхолдер
+            self.combo.set('Выберите калькулятор')  # Плейсхолдер
         elif value == 1:
-            self.combo.insert(45, 'Выберите конвертер')  # Плейсхолдер
+            self.combo.set('Выберите конвертер')  # Плейсхолдер
 
         self.combo.config(foreground="black")
 
