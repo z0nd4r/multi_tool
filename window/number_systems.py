@@ -53,7 +53,11 @@ class NumberSystems:
         self.number_entry_1_1.pack()
 
         ttk.Label(self.frame_1_1, text="из").pack()
-        self.combo_1_1 = ttk.Combobox(self.frame_1_1, values=self.lst)
+        self.combo_1_1 = ttk.Combobox(self.frame_1_1,
+                                      values=self.lst,
+                                      validate="key",
+                                      validatecommand=check_2
+                                      )
         self.combo_1_1.pack()
 
         ttk.Label(self.frame_1_1, text="в десятичную").pack()
