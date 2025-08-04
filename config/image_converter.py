@@ -14,10 +14,12 @@ def convert_image(combo, file_path, output_path):
         try:
             image = Image.open(input_file)
             filename, ext = os.path.splitext(os.path.basename(input_file))
+            if ext == '.png' and choice == 'JPEG':
+                image = image.convert('RGB')
             output_file = os.path.join(output_dir, f'{filename}.{choice.lower()}')
             image.save(output_file, format=choice)
 
             messagebox.showinfo("Успех", f"Изображение сохранено как {output_file}")
 
         except Exception as e:
-            messagebox.showerror("Ошибка", f"Выберите поддерживаемый формат изображения")
+            messagebox.showerror("Ошибка", f"Выберите поддерживаемый формат изображения:{e}")
