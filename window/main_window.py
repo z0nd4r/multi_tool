@@ -10,7 +10,7 @@ import ctypes
 
 class MainWindow:
     def __init__(self):
-        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+        ctypes.windll.shcore.SetProcessDpiAwareness(2)
         # Конфигурация приложения
         self.main_window = tk.Tk()
 
