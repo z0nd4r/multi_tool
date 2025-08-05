@@ -5,23 +5,29 @@ from tkinter import ttk
 from . import NumberSystems, ImageConverter, Menu
 
 import ctypes
-
-
+import platform
 
 class MainWindow:
     def __init__(self):
-        ctypes.windll.shcore.SetProcessDpiAwareness(2)
         # Конфигурация приложения
         self.main_window = tk.Tk()
 
         self.main_window.tk.call('tk', 'scaling', 2)
 
         self.default_font = font.nametofont("TkDefaultFont")
-        self.default_font.configure(size=10)
+
+        if platform.system() == 'Windows':
+            ctypes.windll.shcore.SetProcessDpiAwareness(2)
+            self.default_font.configure(size=10)
+            self.width = 450
+            self.height = 550
+        else:
+            self.default_font.configure(size=11)
+            self.width = 350
+            self.height = 450
 
         self.title = "Multi Tool"
-        self.width = 450
-        self.height = 550
+
 
         # получаем ширину и высоту экрана
         self.ws = self.main_window.winfo_screenwidth()
