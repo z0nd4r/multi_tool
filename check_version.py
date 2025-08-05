@@ -9,7 +9,7 @@ from packaging import version
 from tkinter import messagebox
 
 GITHUB_API = "https://api.github.com/repos/z0nd4r/multi_tool/releases/latest"
-CURRENT_VERSION = "2.0.0"
+CURRENT_VERSION = "1.0.0"
 
 def update_app(parent):
     try:
@@ -38,20 +38,37 @@ def update_app(parent):
 
         # создаём BAT-файл
         old_exe = current_exe + ".old"
-        bat_script = f"""
-        @echo off
-        timeout /t 2 /nobreak
-        echo Переименование текущего файла...
+        bat_script = f"""@echo off
+        chcp 65001 > nul
+        title Application Update
+        
+        echo Waiting for the current version to close...
+        timeout /t 2 /nobreak > NUL
+        
+        echo Renaming the current file...
         ren "{current_exe}" "{os.path.basename(old_exe)}"
-        echo Копирование нового файла...
+        if errorlevel 1 (
+            echo Failed to rename the file. The application may still be running.
+            echo Please close the application and try again.
+            pause
+            exit /b 1
+        )
+        
+        echo Copying the new version...
         copy /Y "{temp_path}" "{current_exe}"
-        echo Запуск новой версии...
-        start "" "{current_exe}"
-        echo Удаление временных файлов...
-        del "{bat_path}"
-        dek "{temp_path}"
-        del "{old_exe}" 2>NUL
-        exit
+        if errorlevel 1 (
+            echo Failed to copy the new version. Please check your permissions.
+            echo Aborting update...
+            ren "{os.path.basename(old_exe)}" "{current_exe}"
+            pause
+            exit /b 1
+        )
+        
+        echo Deleting temporary files...
+        del "{temp_path}" > NUL 2>&1
+        del "{old_exe}" > NUL 2>&1
+        pause
+        exit /b 0
         """
 
         with open(bat_path, "w") as bat:
@@ -69,3 +86,16 @@ def update_app(parent):
         messagebox.showerror('Ошибка', f'Ошибка при работе с файлами: {e}')
     except Exception as e:
         messagebox.showerror("Ошибка", f'Неизвестная ошибка: {e}')
+
+
+        #
+        #         echo Starting the new version...
+        #         start "" "{current_exe}"
+        #         if errorlevel 1 (
+        #             echo Oshibka: Ne udalos' zapustit' novuyu versiyu.
+        #             pause
+        #             exit /b 1
+        #         )
+        #
+        #         echo Waiting for the new version to start...
+        #         timeout /t 2 /nobreak > NUL
