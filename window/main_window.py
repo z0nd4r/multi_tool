@@ -28,7 +28,6 @@ class MainWindow:
 
         self.title = "Multi Tool"
 
-
         # получаем ширину и высоту экрана
         self.ws = self.main_window.winfo_screenwidth()
         self.hs = self.main_window.winfo_screenheight()
@@ -46,6 +45,7 @@ class MainWindow:
 
         self.main_window.title(self.title)
         self.main_window.geometry('%dx%d+%d+%d' % (self.width, self.height, x, y)) # окно появляется посередине
+        self.main_window.minsize(self.width, self.height)
         # self.main_window.resizable(False, False) # запрет изменения размеров окна
 
         self._build_notebook()
