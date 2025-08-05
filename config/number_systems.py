@@ -1,26 +1,38 @@
 from tkinter import messagebox
 class Convert:
-    def __init__(self, first_num, second_num):
-        self.fn = first_num
-        self.sn = second_num
+    def __init__(self, number, first_system, second_system):
+        self.num = number
 
-    def convert_1(self):
+        self.fs = first_system
+        self.ss = second_system
+
+    def convert_1(self, num):
         stroka = ''
-        while self.fn > 0:
-            stroka += str(self.fn % self.sn)
-            self.fn //= self.sn
+        while num > 0:
+            stroka += str(num % self.ss)
+            num //= self.ss
         return int(stroka[::-1])
 
     def convert_2(self):
-        stroka = str(self.fn)
+        stroka = str(self.num)
         l = len(stroka) - 1
         res = 0
         for i in range(len(stroka)):
-            res += int(stroka[i]) * self.sn ** l
+            res += int(stroka[i]) * self.fs ** l
             l -= 1
         print(res)
         return res
 
+    def convert(self):
+        if self.fs == self.ss:
+            return self.num
+        elif self.fs == 10:
+            return self.convert_1(self.num) # конверация из 10 в другую
+        elif self.ss == 10:
+            return self.convert_2() # конвертация из другой в 10
+        else:
+            number_one = self.convert_2()
+            return self.convert_1(number_one)
 
 # Число может содержать только цифры 0 - 7
 def number_check(number, system):
