@@ -22,15 +22,15 @@ class ImageConverter:
         # parent.grid_rowconfigure(0, weight=1)  # Row 0 expands
         # parent.grid_rowconfigure(1, weight=1)
 
-        ttk.Label(parent, text="Выберите \nизображение:").grid(row=0, column=0, sticky=W+E,  padx=15, pady=5) # windows
+        ttk.Label(parent, text="Выберите \nизображение:").grid(row=0, column=0, sticky=W+E,  padx=15, pady=(5, 1)) # windows
         # ttk.Label(parent, text="Выберите изображение:").grid(row=0, column=0, sticky=W+E,  padx=11, pady=5) # linux
-        ttk.Button(parent, text="Обзор", command=self._browse_file).grid(row=0, column=1, sticky=E, padx=15, pady=5)
-        ttk.Label(parent, width=10, textvariable=self.file_name).grid(row=1, column=1, sticky=E, padx=15, pady=1)
+        ttk.Button(parent, text="Обзор", command=self._browse_file).grid(row=0, column=1, sticky=E, padx=15, pady=(5, 1))
+        ttk.Label(parent, width=10, textvariable=self.file_name).grid(row=1, column=1, sticky=E, padx=15, pady=(1, 5))
 
-        ttk.Label(parent, text="Выберите папку для \nсохранения:").grid(row=2, column=0, sticky=W+E, padx=15, pady=5) # windows
+        ttk.Label(parent, text="Выберите папку для \nсохранения:").grid(row=2, column=0, sticky=W+E, padx=15, pady=(5, 1)) # windows
         # ttk.Label(parent, text="Выберите папку для \nсохранения:").grid(row=2, column=0, sticky=W+E, padx=11, pady=5) # linux
-        ttk.Button(parent, text="Обзор", command=self._browse_output_dir).grid(row=2, column=1, sticky=E, padx=15, pady=5)
-        ttk.Label(parent, width=10, textvariable=self.output_path_name).grid(row=3, column=1, sticky=E, padx=15, pady=1)
+        ttk.Button(parent, text="Обзор", command=self._browse_output_dir).grid(row=2, column=1, sticky=E, padx=15, pady=(5, 1))
+        ttk.Label(parent, width=10, textvariable=self.output_path_name).grid(row=3, column=1, sticky=E, padx=15, pady=(1, 10))
 
         ttk.Label(parent, text='Конвертировать в').grid(row=4, column=0, sticky=W+E, padx=15, pady=5) # windows
         # ttk.Label(parent, text='Конвертировать в').grid(row=4, column=0, sticky=W+E, padx=11, pady=5) # linux

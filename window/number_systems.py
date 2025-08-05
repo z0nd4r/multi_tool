@@ -15,13 +15,13 @@ class NumberSystems:
     def _create_interface(self):
         # главный фрейм
         self.main_frame = ttk.Frame(self.root)
-        self.main_frame.pack(padx=10, pady=5)
+        self.main_frame.pack(padx=10, pady=1)
 
         check_1 = (self.root.register(self.is_valid_1), "%P")
         check_2 = (self.root.register(self.is_valid_2), "%P")
 
         # КАЛЬКУЛЯТОР №1
-        self.calc_1_visible = True
+        # self.calc_1_visible = True
 
         # фрейм для первого числа и выпадающего списка
         self.frame_1 = ttk.Frame(self.main_frame)

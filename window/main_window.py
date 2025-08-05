@@ -2,7 +2,7 @@ import tkinter as tk
 import tkinter.font as font
 from tkinter import ttk
 
-from . import NumberSystems, ImageConverter, Menu
+from . import NumberSystems, ImageConverter, Menu, RegularCalculator, TextFileConverter
 
 import ctypes
 import platform
@@ -84,7 +84,7 @@ class MainWindow:
         self.combo.bind("<FocusIn>", lambda event: self.on_focus_in(event, value))
         self.combo.bind("<FocusOut>", lambda event: self.on_focus_out(event, value))
         self.combo.bind("<<ComboboxSelected>>", lambda event: self._on_change(event, frame_down))
-        self.combo.pack(fill="x", padx=10, pady=(5, 10))
+        self.combo.pack(fill="x", padx=10, pady=(5, 5))
 
         return self.combo
 
@@ -130,11 +130,12 @@ class MainWindow:
         choice = combo.get()
         # print(choice)
         if choice == "Обычный":
-            pass
-            # RegularCalculator(self.calculator_frame)
+            RegularCalculator(self.calculator_frame)
         elif choice == "Системы счисления":
             NumberSystems(self.calculator_frame)
-        elif choice == 'Изображения':
+        elif choice == "Текстовые файлы":
+            TextFileConverter(self.converter_frame)
+        elif choice == "Изображения":
             ImageConverter(self.converter_frame)
 
     def _build_style(self):
