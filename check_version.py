@@ -9,7 +9,7 @@ from packaging import version
 from tkinter import messagebox
 
 GITHUB_API = "https://api.github.com/repos/z0nd4r/multi_tool/releases/latest"
-CURRENT_VERSION = "1.0.0"
+CURRENT_VERSION = "2.0.0"
 
 def update_app(parent):
     try:
@@ -74,7 +74,7 @@ def update_app(parent):
         with open(bat_path, "w") as bat:
             bat.write(bat_script)
 
-        messagebox.showinfo("Успех", "Обновлено до последней версии.\nПрограмма перезапустится.")
+        messagebox.showinfo("Успех", "Обновлено до последней версии.\nОткройте программу заново")
 
         # Запускаем батник и выходим
         subprocess.Popen(["cmd", "/c", bat_path], creationflags=subprocess.CREATE_NO_WINDOW) # еще скрываем окно cmd
