@@ -10,7 +10,7 @@ class Menu:
         self.button = ttk.Button(self.header, text="≡ Меню", command=self._toggle_menu)
         self.button.pack(side="left")
 
-        self.menu_frame = tk.Frame(notebook, width=330, height=100, pady=10)
+        self.menu_frame = tk.Frame(notebook, pady=10)
         self.menu_visible = False
 
         self.menu_frame.grid_columnconfigure(0, weight=1)
@@ -18,13 +18,13 @@ class Menu:
 
         ttk.Label(self.menu_frame, text=f'App version: {CURRENT_VERSION}').grid(row=0, column=0, padx=15)
         ttk.Label(self.menu_frame, text='created by zondar__').grid(row=1, column=0, padx=15)
-        ttk.Button(self.menu_frame, text='Обновить', command=lambda: update_app(parent)).grid(row=0, sticky=E, column=1, padx=15)
+        ttk.Button(self.menu_frame, text='Обновить', command=lambda: update_app(parent)).grid(row=0, column=1, padx=15)
 
     def _toggle_menu(self):
         if self.menu_visible:
             self.menu_frame.pack_forget()
         else:
-            self.menu_frame.pack(side='bottom')
+            self.menu_frame.pack(fill='x', side='bottom')
         self.menu_visible = not self.menu_visible
 
 
