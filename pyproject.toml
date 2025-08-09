@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "MultiTool"
-version = "1.0.0"
+version = "2.0.0"
 description = ""
 authors = ["zondar__ <kirito98730tkm@gmail.com>"]
 readme = "README.md"
@@ -11,6 +11,7 @@ python = "^3.12"
 pillow = "^11.3.0"
 customtkinter = "^5.2.2"
 requests = "^2.32.4"
+numexpr = "^2.11.0"
 
 
 [build-system]
