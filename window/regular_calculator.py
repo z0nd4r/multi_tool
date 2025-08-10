@@ -54,10 +54,10 @@ class RegularCalculator:
 
     def _button_clicked(self, value_of_button):
         text = self.number_entry_1.get()
-        
+
         if text:
             if value_of_button == '=':
-                if text[-1] in '+-/*':
+                if text[-1] in '+-/*.':
                     self.number_entry_1.delete(len(text)-1, END)
                     text = self.number_entry_1.get()
                 self._result(text)
