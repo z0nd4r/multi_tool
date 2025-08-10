@@ -15,7 +15,7 @@ class ImageConverter:
         self.output_path = tk.StringVar()
         self.output_path_name = tk.StringVar()
 
-        formats = ["PNG", "JPEG", "WebP"]
+        formats = ["PNG", "JPEG", "WebP", "TIFF", "BMP", "ICO"]
 
         parent.grid_columnconfigure(0, weight=1)  # Column 0 expands
         parent.grid_columnconfigure(1, weight=1)  # Column 1 expands
@@ -48,7 +48,7 @@ class ImageConverter:
     def _browse_file(self):
         filename = filedialog.askopenfilename(initialdir='.',
                                               title='Выберите изображение',
-                                              filetypes=(("Image files", "*.png *.jpg *.jpeg *.bmp *.gif *.webp"),
+                                              filetypes=(("Image files", "*.png *.jpg *.jpeg *.bmp *.gif *.webp *.tif *.tiff *.ico"),
                                                          ("All files", "*.*")))
         print(f"Результат filedialog: {filename}")
         if filename:
