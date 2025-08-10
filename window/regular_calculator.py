@@ -54,20 +54,7 @@ class RegularCalculator:
 
     def _button_clicked(self, value_of_button):
         text = self.number_entry_1.get()
-        # print(len(text))
-        # l = len(text) + 1
-        # i = 0
-        # # проверяет, есть ли нули перед числами (если число не дробное)
-        # while l:
-        #     if text[i] == text[0] == '0' and value_of_button != '.' and text[i+1] != '.':
-        #         print(text[i], 'one', i)
-        #         self.number_entry_1.delete(i)
-        #     elif text[i] == '0' and text[i - 1] in '+-/*' and value_of_button != '.' and text[i+1] != '.':
-        #         print(text[i], text[i-1], 'two', i)
-        #         self.number_entry_1.delete(i)
-        #     l -= 1
-        #     i += 1
-
+        
         if text:
             if value_of_button == '=':
                 if text[-1] in '+-/*':
