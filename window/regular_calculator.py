@@ -22,16 +22,16 @@ class RegularCalculator:
         self.main_frame = ttk.Frame(self.root)
         self.main_frame.pack(pady=5)
 
+        s = ttk.Style()
+
         self.number_entry_1 = ttk.Entry(self.main_frame,
-                                        width=30,
-                                        font=1,
+                                        font=('Arial', 15),
                                         validate='key',
                                         validatecommand=self.check_1)
         self.number_entry_1.pack()
 
         self.number_entry_2 = ttk.Entry(self.main_frame,
-                                        width=30,
-                                        font=1,
+                                        font=('Arial', 15),
                                         state='readonly')
         self.number_entry_2.pack()
 
@@ -91,6 +91,8 @@ class RegularCalculator:
         if newval and newval[0] in "+-*/":  # проверка, что строка не начинается с оператора
             return False
         elif re.search(r"[+\-*/.]{2,}", newval):  # ищет два или более операторов подряд
+            return False
+        elif re.search(r"\d{" + str(11) + ",}", newval):  # ищет последовательность цифр длиннее 11
             return False
         return re.match(r'^[\d+\-*/.]*$', newval) is not None
 
