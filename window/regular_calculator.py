@@ -54,20 +54,25 @@ class RegularCalculator:
 
     def _button_clicked(self, value_of_button):
         text = self.number_entry_1.get()
+        # print(len(text))
+        # l = len(text) + 1
+        # i = 0
+        # # проверяет, есть ли нули перед числами (если число не дробное)
+        # while l:
+        #     if text[i] == text[0] == '0' and value_of_button != '.' and text[i+1] != '.':
+        #         print(text[i], 'one', i)
+        #         self.number_entry_1.delete(i)
+        #     elif text[i] == '0' and text[i - 1] in '+-/*' and value_of_button != '.' and text[i+1] != '.':
+        #         print(text[i], text[i-1], 'two', i)
+        #         self.number_entry_1.delete(i)
+        #     l -= 1
+        #     i += 1
 
         if text:
-            # проверяет, есть ли нули перед числами (если число не дробное)
             if value_of_button == '=':
-                for i in range(len(text)):
-                    if text[i] == text[0] == '0' and text[1] != '.':
-                        print(text[i])
-                        self.number_entry_1.delete(i)
-                    elif text[i] == '0' and text[i - 1] in '=+-/*' and value_of_button != '.':
-                        print(text[i])
-                        self.number_entry_1.delete(i)
-
-                text = self.number_entry_1.get()
-
+                if text[-1] in '+-/*':
+                    self.number_entry_1.delete(len(text)-1, END)
+                    text = self.number_entry_1.get()
                 self._result(text)
         if text:
             if value_of_button == '<--':
@@ -78,6 +83,19 @@ class RegularCalculator:
                 self.number_entry_2.delete(0, END)
                 self.number_entry_2.config(state='readonly')
         self.number_entry_1.insert(END, value_of_button)
+
+        text = self.number_entry_1.get()
+        l = len(text)
+
+        for i in range(l):
+            if i + 1 != l:
+                if text[i] == text[0] == '0' and value_of_button != '.' and text[i + 1] != '.':
+                    print(text[i], 'one', i)
+                    self.number_entry_1.delete(i)
+                elif text[i] == '0' and text[i - 1] in '+-/*' and value_of_button != '.' and text[i + 1] != '.':
+                    print(text[i], text[i - 1], 'two', i)
+                    self.number_entry_1.delete(i)
+
 
     def _result(self, text):
         result = calculation(text)
