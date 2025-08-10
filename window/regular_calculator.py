@@ -1,6 +1,6 @@
 import re
 import tkinter as tk
-from tkinter import ttk, END
+from tkinter import ttk, END, messagebox
 from config import calculation
 
 
@@ -54,8 +54,20 @@ class RegularCalculator:
 
     def _button_clicked(self, value_of_button):
         text = self.number_entry_1.get()
+
         if text:
+            # проверяет, есть ли нули перед числами (если число не дробное)
             if value_of_button == '=':
+                for i in range(len(text)):
+                    if text[i] == text[0] == '0' and text[1] != '.':
+                        print(text[i])
+                        self.number_entry_1.delete(i)
+                    elif text[i] == '0' and text[i - 1] in '=+-/*' and value_of_button != '.':
+                        print(text[i])
+                        self.number_entry_1.delete(i)
+
+                text = self.number_entry_1.get()
+
                 self._result(text)
         if text:
             if value_of_button == '<--':
