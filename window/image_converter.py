@@ -42,8 +42,8 @@ class ImageConverter:
     def _browse_file(self):
         filename = filedialog.askopenfilename(initialdir='.',
                                               title='Выберите изображение',
-                                              filetypes=(("Image files", "*.png *.jpg *.jpeg *.bmp *.gif *.webp *.tif *.tiff *.ico"),
-                                                         ("All files", "*.*")))
+                                              filetypes=(("Изображения", "*.png *.jpg *.jpeg *.bmp *.gif *.webp *.tif *.tiff *.ico"),
+                                                         ("Все файлы", "*.*")))
         print(f"Результат filedialog: {filename}")
         if filename:
             self.file_path.set(filename)
