@@ -1,26 +1,39 @@
 from tkinter import messagebox
 class Convert:
     def __init__(self, number, first_system, second_system):
-        self.num = number
+        self.num = number # тип строка
 
         self.fs = first_system
         self.ss = second_system
 
-    def convert_1(self, num):
+        self.d = {10: 'A', 11: 'B', 12: 'C',
+                  13: 'D', 14: 'E', 15: 'F'}
+
+    def convert_1(self, num): # конверация из 10 в другую
         stroka = ''
         while num > 0:
-            stroka += str(num % self.ss)
+            val = num % self.ss
+            if self.ss == 16 and 16 > val > 9:
+                stroka += self.d[val]
+            else:
+                stroka += str(num % self.ss)
             num //= self.ss
-        return int(stroka[::-1])
+        print(stroka[::-1])
+        return stroka[::-1]
 
-    def convert_2(self):
+    def convert_2(self): # конвертация из другой в 10
         stroka = str(self.num)
+        print(stroka)
         l = len(stroka) - 1
         res = 0
         for i in range(len(stroka)):
-            res += int(stroka[i]) * self.fs ** l
+            if self.fs == 16 and stroka[i].upper() in self.d.values():
+                key = get_key(self.d, stroka[i].upper())
+                print(key)
+                res += key * self.fs ** l
+            else:
+                res += int(stroka[i]) * self.fs ** l
             l -= 1
-        print(res)
         return res
 
     def convert(self):
@@ -33,6 +46,12 @@ class Convert:
         else:
             number_one = self.convert_2()
             return self.convert_1(number_one)
+
+# ищем ключ по значению
+def get_key(d, value):
+    for k, v in d.items():
+        if v == value:
+            return k
 
 # Число может содержать только цифры 0 - 7
 def number_check(number, system):

@@ -24,9 +24,7 @@ class NumberSystems:
         self.frame_1.pack(fill='x')
 
         ttk.Label(self.frame_1, text="Перевести число").pack()
-        self.number_entry_1 = ttk.Entry(self.frame_1,
-                                        validate="key",
-                                        validatecommand=check_1)
+        self.number_entry_1 = ttk.Entry(self.frame_1)
         self.number_entry_1.pack()
 
         ttk.Label(self.frame_1, text="из").pack()
@@ -58,22 +56,30 @@ class NumberSystems:
         return re.match(r'^\d*$', newval) is not None
 
     def show_conversion_result(self):
-        # if self.calc_1_visible:
         if self.combo_1.get() == "" or self.combo_2.get() == "" or self.number_entry_1.get() == "":
             messagebox.showerror("Ошибка", f"Не все числа введены")
             return
-        elif int(self.combo_1.get()) > 16 or int(self.combo_1.get()) < 2:
+        elif int(self.combo_1.get()) > 16 or int(self.combo_1.get()) < 2 and int(self.combo_1.get()) != 16:
             messagebox.showerror("Ошибка", f"Введите систему счисления не меньше 2 и не больше 16")
             return
-        elif int(self.combo_2.get()) > 16 or int(self.combo_2.get()) < 2:
+        elif int(self.combo_2.get()) > 16 or int(self.combo_2.get()) < 2 and int(self.combo_1.get()) != 16:
             messagebox.showerror("Ошибка", f"Введите систему счисления не меньше 2 и не больше 16")
             return
+        elif int(self.combo_1.get()) == 16:
+            lst = ['A', 'B', 'C', 'D', 'E', 'F']
+            for i in self.number_entry_1.get():
+                if i.isdigit():
+                    continue
+                if i.upper() not in lst:
+                    messagebox.showerror("Ошибка", f'В 16-ой системе допустимы только следующие символы:\n'
+                                                   f'0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F')
+                    return
         elif number_check(self.number_entry_1.get(), int(self.combo_1.get())):
             return
 
         try:
             converter = Convert(
-                int(self.number_entry_1.get()),
+                self.number_entry_1.get(),
                 int(self.combo_1.get()),
                 int(self.combo_2.get())
             )
