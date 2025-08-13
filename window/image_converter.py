@@ -15,7 +15,7 @@ class ImageConverter:
         self.output_path = tk.StringVar()
         self.output_path_name = tk.StringVar()
 
-        formats = ["PNG", "JPEG", "WebP", "TIFF", "BMP", "ICO"]
+        self.formats = ["PNG", "JPEG", "WebP", "TIFF", "BMP", "ICO"]
 
         parent.grid_columnconfigure(0, weight=1)  # Column 0 expands
         parent.grid_columnconfigure(1, weight=1)  # Column 1 expands
@@ -31,7 +31,7 @@ class ImageConverter:
         ttk.Label(parent, width=12, textvariable=self.output_path_name).grid(row=3, column=1, sticky=E, padx=15, pady=(0, 15))
 
         ttk.Label(parent, text='Конвертировать в').grid(row=4, column=0, sticky=W+E, padx=15, pady=(5, 5)) # windows
-        self.combo = ttk.Combobox(parent, width=6, values=formats, state='readonly')
+        self.combo = ttk.Combobox(parent, width=6, values=self.formats, state='readonly')
         self.combo.grid(row=4, column=1, sticky=E, padx=15, pady=(5, 5))
 
         ttk.Button(parent, text="Конвертировать", command=lambda: convert_image(self.combo,
@@ -48,7 +48,12 @@ class ImageConverter:
         if filename:
             self.file_path.set(filename)
             filename, ext = os.path.splitext(os.path.basename(filename))
-            self.file_name.set(f'...{filename[-5:]}{ext}')
+            new_ext = ext.replace('.', '')
+            if new_ext.upper() in self.formats:
+                self.file_name.set(f'...{filename[-5:]}{ext}')
+            else:
+                messagebox.showerror("Ошибка", f"Пожалуйста, выберите поддерживаемый формат изображения")
+                return
 
     # открывает диалоговое окно для выбора пути сохранения
     def _browse_output_dir(self):
