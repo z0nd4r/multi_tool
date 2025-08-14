@@ -65,6 +65,7 @@ class TextFileConverter:
             else:
                 messagebox.showerror("Ошибка", f"Пожалуйста, выберите поддерживаемый формат текстового файла")
                 return
+
     # открывает диалоговое окно для выбора пути сохранения
     def _browse_output_dir(self):
         output_dir = filedialog.askdirectory(initialdir='.', title='Выберите папку для сохранения')

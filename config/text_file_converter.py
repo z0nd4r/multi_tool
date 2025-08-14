@@ -15,30 +15,41 @@ def convert_text(combo, file_path, output_path):
         messagebox.showerror("Ошибка", "Пожалуйста, выберите выводимый формат")
 
     filename, ext = os.path.splitext(os.path.basename(input_file))
+    output_file = os.path.join(output_dir, f'{filename}.{choice.lower()}')
 
     if ext.upper() == '.'+choice:
         messagebox.showinfo('Внимание', 'Входной и выходной форматы совпадают')
+        return
 
-    if choice == 'TXT': # конвертация в txt
-        if ext.upper() == '.DOCX':
-            text = get_text_from_docx(input_file)
-            output_file = os.path.join(output_dir, f'{filename}.{choice.lower()}')
-            if os.path.exists(output_file):
-                examination_and_save(text, output_file, output_dir, filename, choice)
-                return
-            else:
-                try:
-                    save_text_to_file(text, output_file)
-                    messagebox.showinfo('Успех', f'Тектовый файл сохранен как:\n{output_dir}')
-                except Exception as e:
-                    messagebox.showerror('Ошибка', f'Ошибка при записи в файл:\n{e}')
-    elif choice == '.PDF': # конвертация в pdf
-        pass
-    elif choice == '.DOCX': # конвертация в docx
-        pass
+    if ext.upper() == '.DOCX':
+        text = get_text_from_docx(input_file)
+    elif ext.upper() == '.PDF':
+        text = get_text_from_pdf(input_file)
+
+    # проверка, есть ли файл с таким же именем в дериктории
+    if os.path.exists(output_file):
+        examination_and_save(text, output_file, output_dir, filename, choice)
+        return
+    else:
+        save_text_to_file(text, output_file, choice)
 
 
-# извлекает текст из DOCX-файла.
+# сохраняет текст в файл
+def save_text_to_file(text, output_file, choice):
+    try:
+        if choice == 'TXT':
+            with open(output_file, "w", encoding="utf-8") as f:
+                f.write(text)
+        elif choice == 'PDF':
+            pass
+        elif choice == 'DOCX':
+            write_text_to_docx(text, output_file)
+        messagebox.showinfo('Успех', f'Тектовый файл сохранен как:\n{output_file}')
+    except Exception as e:
+        messagebox.showerror('Ошибка', f'Ошибка при записи в файл:\n{e}')
+
+
+# извлекает текст из DOCX файла
 def get_text_from_docx(docx_file):
     try:
         document = Document(docx_file)
@@ -50,10 +61,37 @@ def get_text_from_docx(docx_file):
         messagebox.showerror('Ошибка', f'Ошибка при чтении DOCX-файла:\n{e}')
         return
 
-# сохраняет текст в файл
-def save_text_to_file(text, output_file):
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write(text)
+
+# извлекает текст из PDF файла
+def get_text_from_pdf(pdf_file):
+    try:
+        pdf_document = fitz.open(pdf_file)
+        full_text = ''
+        for page_num in range(pdf_document.page_count):
+            page = pdf_document.load_page(page_num)
+            text = page.get_text()
+            full_text += text
+        return full_text
+    except Exception as e:
+        messagebox.showerror('Ошибка', f'Ошибка при чтении PDF файла:\n{e}')
+        return
+
+
+# создает DOCX файл из текста
+def write_text_to_docx(text, output_file):
+    try:
+        document = Document()
+        for paragraph_text in text.splitlines():
+            document.add_paragraph(paragraph_text)
+        document.save(output_file)
+    except Exception as e:
+        messagebox.showerror('Ошибка', f'Ошибка при записи DOCX файла:\n{e}')
+        return
+
+# создает PDF файл из текста
+def write_text_to_pdf(text, pdf_file):
+    pass
+
 
 # вывод диалогового окна, если файл существует в выбранной директории и сохранение файла
 def examination_and_save(text, output_file, output_dir, filename, choice):
@@ -71,7 +109,7 @@ def examination_and_save(text, output_file, output_dir, filename, choice):
     if response is True:
         try:
             save_text_to_file(text, output_file)
-            messagebox.showinfo('Успех', f'Тектовый файл сохранен как:\n{output_dir}')
+            messagebox.showinfo('Успех', f'Текстовый файл сохранен как:\n{output_file}')
         except Exception as e:
             messagebox.showerror('Ошибка', f'Ошибка при записи в файл:\n{e}')
     elif response is False:
@@ -82,14 +120,14 @@ def examination_and_save(text, output_file, output_dir, filename, choice):
             if not os.path.exists(new_output_file):
                 try:
                     save_text_to_file(text, new_output_file)
-                    messagebox.showinfo('Успех', f'Тектовый файл сохранен как:\n{output_dir}')
+                    messagebox.showinfo('Успех', f'Текстовый файл сохранен как:\n{new_output_file}')
                 except Exception as e:
                     messagebox.showerror('Ошибка', f'Ошибка при записи в файл:\n{e}')
                 break
             counter += 1
     else:
         messagebox.showinfo("Внимание", "Сохранение отменено")
-        return None
+        return
 
 
 
