@@ -1,7 +1,10 @@
 import os
+import re
 from tkinter import messagebox
 from docx import Document  # Для DOCX
 import fitz  # PyMuPDF для PDF
+from weasyprint import HTML
+
 
 def convert_text(combo, file_path, output_path):
     input_file = file_path.get()
@@ -26,7 +29,7 @@ def convert_text(combo, file_path, output_path):
     elif ext.upper() == '.PDF':
         text = get_text_from_pdf(input_file)
 
-    # проверка, есть ли файл с таким же именем в дериктории
+    # проверка, есть ли файл с таким же именем в директории
     if os.path.exists(output_file):
         examination_and_save(text, output_file, output_dir, filename, choice)
         return
@@ -41,10 +44,10 @@ def save_text_to_file(text, output_file, choice):
             with open(output_file, "w", encoding="utf-8") as f:
                 f.write(text)
         elif choice == 'PDF':
-            pass
+            write_text_to_pdf(text, output_file)
         elif choice == 'DOCX':
             write_text_to_docx(text, output_file)
-        messagebox.showinfo('Успех', f'Тектовый файл сохранен как:\n{output_file}')
+        messagebox.showinfo('Успех', f'Текстовый файл сохранен как:\n{output_file}')
     except Exception as e:
         messagebox.showerror('Ошибка', f'Ошибка при записи в файл:\n{e}')
 
@@ -89,8 +92,30 @@ def write_text_to_docx(text, output_file):
         return
 
 # создает PDF файл из текста
-def write_text_to_pdf(text, pdf_file):
-    pass
+def write_text_to_pdf(text, output_file):
+    try:
+        html = text_to_html(text)
+
+        HTML(string=html).write_pdf(output_file)
+
+
+    except Exception as e:
+        print(e)
+        messagebox.showerror('Ошибка', f'Ошибка при записи PDF файла:\n{e}')
+        return
+
+def text_to_html(text):
+    """Преобразует простой текст в HTML с базовым форматированием."""
+    # Замените эти выражения на более сложные правила, если это необходимо
+    html = "<html><head><style>body {font-family: Arial, sans-serif; font-size: 12pt;} p {margin-bottom: 5px;}</style></head><body>"
+    lines = text.split('\n')
+    for line in lines:
+        if line.strip():  # Добавляем теги <p> только для непустых строк
+            html += "<p>" + line + "</p>"
+        else:
+            html += "<br>" # Пустая строка - добавляем перенос строки
+    html += "</body></html>"
+    return html
 
 
 # вывод диалогового окна, если файл существует в выбранной директории и сохранение файла
@@ -107,22 +132,14 @@ def examination_and_save(text, output_file, output_dir, filename, choice):
     )
 
     if response is True:
-        try:
-            save_text_to_file(text, output_file)
-            messagebox.showinfo('Успех', f'Текстовый файл сохранен как:\n{output_file}')
-        except Exception as e:
-            messagebox.showerror('Ошибка', f'Ошибка при записи в файл:\n{e}')
+        save_text_to_file(text, output_file, choice)
     elif response is False:
         counter = 1
         while True:
             new_filename = f"{filename}_{counter}.{choice.lower()}"
             new_output_file = os.path.join(output_dir, new_filename)
             if not os.path.exists(new_output_file):
-                try:
-                    save_text_to_file(text, new_output_file)
-                    messagebox.showinfo('Успех', f'Текстовый файл сохранен как:\n{new_output_file}')
-                except Exception as e:
-                    messagebox.showerror('Ошибка', f'Ошибка при записи в файл:\n{e}')
+                save_text_to_file(text, new_output_file, choice)
                 break
             counter += 1
     else:
