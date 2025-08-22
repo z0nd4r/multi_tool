@@ -15,11 +15,17 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib import colors
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
 from docx.oxml.ns import qn
 from docx.shared import Pt, Inches
 
 import chardet
 
+font_normal = "./timesnewromanpsmt.ttf"
+font_italic = "./timesnewromanps_italicmt.ttf"
+
+pdfmetrics.registerFont(TTFont('TimesNewRoman', font_normal))
+pdfmetrics.registerFont(TTFont('TimesNewRoman-Italic', font_italic))
 
 def convert_text(combo, file_path, output_path):
     text = None
@@ -58,21 +64,24 @@ def convert_text(combo, file_path, output_path):
     elif ext.upper() == '.PDF':
         text = get_text_from_pdf(input_file)
     elif ext.upper() == '.TXT':
-        text = get_text_from_txt(input_file)
+        if choice == 'PDF':
+            text = None
+        else:
+            text = get_text_from_txt(input_file)
 
-    # если текст не найден, останаливаем программу
+    # если текст не найден, останавливаем программу
     if text is None and choice != 'PDF':
         return
 
     # проверка, есть ли файл с таким же именем в директории
     if os.path.exists(output_file):
-        examination_and_save(text, output_file, output_dir, filename, choice)
+        examination_and_save(text, output_file, output_dir, filename, choice, ext)
         return
     else:
-        save_text_to_file(text, output_file, choice)
+        save_text_to_file(text, output_file, choice, ext)
 
 
-def save_text_to_file(text, output_file, choice):
+def save_text_to_file(text, output_file, choice, ext):
     """
     Сохраняет текст в файл
     """
@@ -81,14 +90,19 @@ def save_text_to_file(text, output_file, choice):
             with open(output_file, "w", encoding="utf-8") as f:
                 f.write(text)
         elif choice == 'PDF':
-            success, e = docx_to_pdf(input_file, output_file)
+            if ext.upper() == '.DOCX':
+                success, e = docx_to_pdf(input_file, output_file)
+            else:
+                print(os.path.exists(input_file))
+                success, e = txt_to_pdf(input_file, output_file)
             if not success:
+                print(e)
                 messagebox.showerror('Ошибка', f'Ошибка при записи PDF файла:\n{e}')
                 return
         elif choice == 'DOCX':
             success, e = write_text_to_docx(text, output_file)
             if not success:
-                messagebox.showerror('Ошибка', f'Ошибка при записи DOCX файла:\n{e}')
+                messagebox.showerror('Ошибка', f'Ошибка при записи DOCX файла:\nзакройте существующий DOCX файл и попробуйте снова')
                 return
 
         messagebox.showinfo('Успех', f'Текстовый файл сохранен как:\n{output_file}')
@@ -136,21 +150,17 @@ def get_text_from_pdf(pdf_file):
     Извлекает текст из PDF файла
     """
     try:
-        print('ch1')
         pdf_document = fitz.open(pdf_file)
         full_text = ''
         for page_num in range(pdf_document.page_count):
-            print('ch2')
             page = pdf_document.load_page(page_num)
             blocks = page.get_text('blocks')
             for block in blocks:
-                print('ch3')
                 text = block[4]  # текст находится в 5-м элементе кортежа
                 full_text += text + "\n"  # добавляем перенос строки между блоками
 
         return full_text
     except Exception as e:
-        print('ch4')
         messagebox.showerror('Ошибка', f'Ошибка при чтении PDF файла:\n{e}')
         return
 
@@ -160,7 +170,7 @@ def get_text_from_txt(txt_file):
     Извлекает текст из TXT файла
     """
     try:
-        with open(txt_file, 'r') as f:
+        with open(txt_file, 'r', encoding='utf-8') as f:
             full_text = f.read()
         return full_text
     except Exception as e:
@@ -180,21 +190,72 @@ def write_text_to_docx(text, output_file):
         section.left_margin = Mm(10)
         section.right_margin = Mm(15)
 
+        font_size = Pt(16)
+        font_style = 'TimesNewRoman'
+
         for paragraph_text in text.splitlines():
             if '\t' in paragraph_text:
                 # Для строк с табуляцией создаем отдельный параграф
                 p = document.add_paragraph()
-                p_fmt = p.paragraph_format
                 for i, part in enumerate(paragraph_text.split('\t')):
-                    p.add_run(part)
+                    run = p.add_run(part)
+                    run.font.name = font_style
+                    run.font.size = font_size
                     if i < len(paragraph_text.split('\t')) - 1:
                         # Добавляем табуляцию
-                        p.add_run().add_tab()
+                        run = p.add_run()
+                        run.add_tab()
+                        run.font.name = font_style
+                        run.font.size = font_size
             else:
-                document.add_paragraph(paragraph_text)
+                p = document.add_paragraph()
+                run = p.add_run(paragraph_text)
+                run.font.name = font_style
+                run.font.size = font_size
+
         document.save(output_file)
         return True, None
     except Exception as e:
+        return False, e
+
+
+def txt_to_pdf(txt_file, output_file):
+    """
+    Конвертирует TXT в PDF
+    """
+    try:
+        # Создаём PDF-файл
+        doc_pdf = SimpleDocTemplate(output_file, pagesize=A4,
+                                    leftMargin=20 * mm, rightMargin=20 * mm,
+                                    topMargin=20 * mm, bottomMargin=20 * mm)
+
+        # Читаем текст
+        with open(txt_file, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+
+        style = ParagraphStyle(
+            name='CustomStyle',
+            fontName='TimesNewRoman',
+            fontSize=12,
+            leading=14,
+            leftIndent=0,
+            firstLineIndent=0,
+            spaceBefore=0,
+            spaceAfter=0,
+            alignment=TA_LEFT
+        )
+
+        # Формируем контент
+        content = []
+        for line in lines:
+            if line.strip():  # Пропускаем пустые строки
+                content.append(Paragraph(line.strip(), style))
+                content.append(Spacer(1, 5))  # Небольшой отступ между абзацами
+
+        doc_pdf.build(content)
+        return True, None
+    except Exception as e:
+        print(e)
         return False, e
 
 
@@ -210,12 +271,6 @@ def docx_to_pdf(docx_path, output_file):
         #     if ord(char) < 32:  # проверяем управляющие символы
         #         print(f"Символ {i}: {ord(char)}")
         # # print(text.split("\n\n"))
-
-        font_normal = "./timesnewromanpsmt.ttf"
-        font_italic = "./timesnewromanps_italicmt.ttf"
-
-        pdfmetrics.registerFont(TTFont('TimesNewRoman', font_normal))
-        pdfmetrics.registerFont(TTFont('TimesNewRoman-Italic', font_italic))
 
         # for fontname in pdfmetrics.standardFonts:
         #     print(fontname)
@@ -355,7 +410,7 @@ def process_table(element, story):
         story.append(table)
         story.append(Spacer(1, 5 * mm))
 
-def examination_and_save(text, output_file, output_dir, filename, choice):
+def examination_and_save(text, output_file, output_dir, filename, choice, ext):
     """
     Выводит диалоговое окно, если файл существует в выбранной директории и сохранение файла
     """
@@ -371,14 +426,14 @@ def examination_and_save(text, output_file, output_dir, filename, choice):
     )
 
     if response is True:
-        save_text_to_file(text, output_file, choice)
+        save_text_to_file(text, output_file, choice, ext)
     elif response is False:
         counter = 1
         while True:
             new_filename = f"{filename}_{counter}.{choice.lower()}"
             new_output_file = os.path.join(output_dir, new_filename)
             if not os.path.exists(new_output_file):
-                save_text_to_file(text, new_output_file, choice)
+                save_text_to_file(text, new_output_file, choice, ext)
                 break
             counter += 1
     else:
