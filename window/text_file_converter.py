@@ -25,19 +25,19 @@ class TextFileConverter:
         # parent.grid_rowconfigure(1, weight=1)
 
         ttk.Label(self.root, text="Выберите \nтекстовый файл:").grid(row=0, column=0, sticky=W + E, padx=15,
-                                                                     pady=(5, 1))  # windows
+                                                                     pady=(5, 1))
         ttk.Button(self.root, text="Обзор", command=self._browse_file).grid(row=0, column=1, sticky=E, padx=15,
                                                                             pady=(5, 1))
         ttk.Label(self.root, width=12, textvariable=self.file_name).grid(row=1, column=1, sticky=E, padx=15, pady=(0, 5))
 
         ttk.Label(self.root, text="Выберите папку для \nсохранения:").grid(row=2, column=0, sticky=W + E, padx=15,
-                                                                           pady=(5, 1))  # windows
+                                                                           pady=(5, 1))
         ttk.Button(self.root, text="Обзор", command=self._browse_output_dir).grid(row=2, column=1, sticky=E, padx=15,
                                                                                   pady=(5, 1))
         ttk.Label(self.root, width=12, textvariable=self.output_path_name).grid(row=3, column=1, sticky=E, padx=15,
                                                                                 pady=(0, 15))
 
-        ttk.Label(self.root, text='Конвертировать в').grid(row=4, column=0, sticky=W + E, padx=15, pady=(5, 5))  # windows
+        ttk.Label(self.root, text='Конвертировать в').grid(row=4, column=0, sticky=W + E, padx=15, pady=(5, 5))
         self.combo = ttk.Combobox(self.root, width=6, values=self.formats, state='readonly')
         self.combo.grid(row=4, column=1, sticky=E, padx=15, pady=(5, 5))
 
