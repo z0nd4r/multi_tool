@@ -1,26 +1,27 @@
-[project]
-name = "multi-tool"
+[tool.poetry]
+name = "Multi_tool"
 version = "2.1.0"
 description = ""
-authors = [
-    {name = "Zondar__",email = "kirito98730tkm@gmail.com"}
-]
+authors = ["Zondar__ <kirito98730tkm@gmail.com>"]
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = [
-    "pillow (>=11.3.0,<12.0.0)",
-    "customtkinter (>=5.2.2,<6.0.0)",
-    "requests (>=2.32.4,<3.0.0)",
-    "numexpr (>=2.11.0,<3.0.0)",
-    "fitz (>=0.0.1.dev2,<0.0.2)",
-    "docx (>=0.2.4,<0.3.0)",
-    "python-docx (>=1.2.0,<2.0.0)",
-    "pymupdf (>=1.26.3,<2.0.0)",
-    "fpdf (>=1.7.2,<2.0.0)",
-    "weasyprint (>=66.0,<67.0)"
-]
+license = ""
 
+[tool.poetry-scripts]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+Pillow = ">=11.3.0,<12.0.0"
+customtkinter = ">=5.2.2,<6.0.0"
+requests = ">=2.32.4,<3.0.0"
+numexpr = ">=2.11.0,<3.0.0"
+python-docx = ">=1.2.0,<2.0.0"
+reportlab = "^4.4.3"
+pymupdf = "^1.26.3"
+chardet = "^5.2.0"
+
+[tool.poetry.group.dev.dependencies]
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
