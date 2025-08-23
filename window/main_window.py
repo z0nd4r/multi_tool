@@ -130,7 +130,7 @@ class MainWindow:
         choice = combo.get()
         # print(choice)
         if choice == "Обычный":
-            RegularCalculator(self.calculator_frame)
+            RegularCalculator(self.calculator_frame, self.main_window)
         elif choice == "Системы счисления":
             NumberSystems(self.calculator_frame)
         elif choice == "Текстовые файлы":

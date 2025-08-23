@@ -1,3 +1,4 @@
+import os
 import re
 import tkinter as tk
 from tkinter import ttk, END, messagebox
@@ -5,7 +6,9 @@ from config import calculation
 
 
 class RegularCalculator:
-    def __init__(self, parent):
+    def __init__(self, parent, main_window):
+        self.main = main_window
+
         self.root = parent
 
         self.buttons = [[7, 8, 9, '/'],
@@ -112,7 +115,20 @@ class RegularCalculator:
             self.history_listbox = None
             self.history_window_visible = False
 
+        def on_close_2():
+            print("Основное окно закрыто")
+            self.main.destroy() # закрыть основное окно
+            # self.history_window.destroy() # закрыть меню истории
+            self.history_listbox = None
+            self.history_window_visible = False
+            if os.path.exists("history.txt"):
+                os.remove("history.txt")
+
+
         self.history_window.protocol("WM_DELETE_WINDOW", on_close)
+
+        self.main.protocol("WM_DELETE_WINDOW", on_close_2)
+
 
 
     def _button_clicked(self, value_of_button):
@@ -161,11 +177,14 @@ class RegularCalculator:
         record = f"{text} = {result}"
         self.history.append(record)
 
-        # Запись в файл
+        # запись в файл
         with open("history.txt", "a", encoding="utf-8") as f:
             f.write(record + "\n")
 
-        # Обновление Listbox, если окно открыто
+        # делаем файл скрытым
+        os.system("attrib +h history.txt")
+
+        # обновление Listbox, если окно открыто
         if self.history_listbox:
             try:
                 self.history_listbox.insert(tk.END, record)
