@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 from tkinter import messagebox
 
 # Для DOCX
@@ -21,8 +22,14 @@ from docx.shared import Pt, Inches
 
 import chardet
 
-font_normal = "./timesnewromanpsmt.ttf"
-font_italic = "./timesnewromanps_italicmt.ttf"
+# возвращает корректный путь к файлу, независимо от того, запущен ли скрипт как .py или как .exe.
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+font_normal = resource_path("fonts/timesnewromanpsmt.ttf")
+font_italic = resource_path("fonts/timesnewromanps_italicmt.ttf")
 
 pdfmetrics.registerFont(TTFont('TimesNewRoman', font_normal))
 pdfmetrics.registerFont(TTFont('TimesNewRoman-Italic', font_italic))
