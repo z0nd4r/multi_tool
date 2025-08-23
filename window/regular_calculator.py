@@ -95,7 +95,7 @@ class RegularCalculator:
         self.history_scrollbar.pack(side="right", fill="y")
 
         self.history_listbox = tk.Listbox(self.history_frame,
-                                          width=25,
+                                          width=100,
                                           height=10,
                                           font=('Arial', 12),
                                           yscrollcommand=self.history_scrollbar.set)
