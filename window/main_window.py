@@ -1,8 +1,9 @@
 import tkinter as tk
 import tkinter.font as font
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
-from . import NumberSystems, ImageConverter, Menu, RegularCalculator, TextFileConverter
+from check_version import CURRENT_VERSION, update_app
+from . import NumberSystems, ImageConverter, RegularCalculator, TextFileConverter
 
 import ctypes
 import platform
@@ -15,6 +16,8 @@ class MainWindow:
         self.main_window.tk.call('tk', 'scaling', 2)
 
         self.default_font = font.nametofont("TkDefaultFont")
+
+        self.selected_tab_index = 0 # номер страницы инструмента
 
         if platform.system() == 'Windows':
             ctypes.windll.shcore.SetProcessDpiAwareness(2)
@@ -35,7 +38,7 @@ class MainWindow:
         # Инициализация окна
         self._build_main_window()
 
-        Menu(self.main_window, self.notebook)
+        # Menu(self.main_window)
 
         tk.mainloop()
 
@@ -48,7 +51,11 @@ class MainWindow:
         self.main_window.minsize(self.width, self.height)
         # self.main_window.resizable(False, False) # запрет изменения размеров окна
 
-        self._build_notebook()
+        self._build_main_menu()
+
+        self._build_menu()
+
+        self._build_tools_frames()
         self._build_converter_frame()
         self._build_calculator_frame()
 
@@ -57,19 +64,38 @@ class MainWindow:
 
         self._build_style()
 
+    # создание основного меню
+    def _build_main_menu(self):
+        self.main_window.option_add("*tearOff", False)
+
+        self.main_menu = tk.Menu()
+        # self.file_menu = tk.Menu()
+        self.tools_menu = tk.Menu()
+        self.ref_menu = tk.Menu()
+
+        self.tools_menu.add_command(label='Обновление', command=update_app)
+
+        self.ref_menu.add_command(label='О программе', command=self._check_info)
+
+        # self.main_menu.add_cascade(label='Файл')
+        self.main_menu.add_cascade(label='Инструменты', menu=self.tools_menu)
+        self.main_menu.add_cascade(label='Справка', menu=self.ref_menu)
+
+        self.main_window.config(menu=self.main_menu)
+
     # создание вкладок
-    def _build_notebook(self):
-        self.notebook = ttk.Notebook(self.main_window)
-        self.notebook.pack(fill='both', expand=True)
+    def _build_tools_frames(self):
+        # self.notebook = ttk.Notebook(self.main_window)
+        # self.notebook.pack(fill='both', expand=True)
 
-        self.frame_1 = ttk.Frame(self.notebook)
-        self.frame_2 = ttk.Frame(self.notebook)
+        self.frame_1 = ttk.Frame(self.main_window)
+        self.frame_2 = ttk.Frame(self.main_window)
 
-        self.frame_1.pack(fill='both', expand=True)
-        self.frame_2.pack(fill='both', expand=True)
+        self.frame_1_visible = False
+        self.frame_2_visible = False
 
-        self.notebook.add(self.frame_1, text="Конвертер")
-        self.notebook.add(self.frame_2, text="Калькулятор")
+        # self.notebook.add(self.frame_1, text="Конвертер")
+        # self.notebook.add(self.frame_2, text="Калькулятор")
 
     # выпадающий список
     def _build_combo(self, frame_top, values, value, frame_down):
@@ -120,11 +146,9 @@ class MainWindow:
         for widget in frame.winfo_children():
             widget.destroy()
 
-        selected_tab_index = self.notebook.index("current")
-
-        if selected_tab_index == 0:
+        if self.selected_tab_index == 1:
             combo = self.combo_converter
-        elif selected_tab_index == 1:
+        elif self.selected_tab_index == 2:
             combo = self.combo_calculator
 
         choice = combo.get()
@@ -142,4 +166,100 @@ class MainWindow:
         style = ttk.Style()
         style.configure("TLabel", font=self.default_font)
         style.configure("TCombobox", padding=5)
+
+    def _check_info(self):
+        messagebox.showinfo('О программе', f'App version: {CURRENT_VERSION}\ncreated by zondar__')
+
+    def toggle_frames(self, frame):
+        if frame == 1 and not self.frame_1_visible:
+            if self.frame_2_visible:
+                self.frame_2.pack_forget()
+                self.frame_2_visible = not self.frame_2_visible
+            self.frame_1.pack(fill='both', expand=True)
+            self.selected_tab_index = 1
+            self.frame_1_visible = not self.frame_1_visible
+
+        elif frame == 2 and not self.frame_2_visible:
+            if self.frame_1_visible:
+                self.frame_1.pack_forget()
+                self.frame_1_visible = not self.frame_1_visible
+            self.frame_2.pack(fill='both', expand=True)
+            self.selected_tab_index = 2
+            self.frame_2_visible = not self.frame_2_visible
+
+    def _build_menu(self):
+        self.header = tk.Frame(self.main_window, height=50)
+        self.header.pack(fill="x", side='bottom')
+
+        toggle_frames = MainWindow.toggle_frames
+
+        '''
+        Кнопка меню
+        '''
+        self.menu_button = ttk.Button(self.header, text="≡ Меню", command=self._toggle_menu)
+        self.menu_button.pack(side="left")
+
+        self.menu_frame = tk.Frame(self.main_window, pady=10)
+        self.menu_visible = False
+
+        # ttk.Button(self.menu_frame, text='Конвертер').pack(fill='x', side='left')
+        # ttk.Button(self.menu_frame, text='Калькулятор').pack(fill='x', side='bottom')
+
+        # self.menu_frame.grid_columnconfigure(0, weight=1)
+        # self.menu_frame.grid_columnconfigure(1, weight=1)
+
+        ttk.Button(self.menu_frame, text='Конвертер',
+                   width=20,
+                   command=lambda: self.toggle_frames(1)).grid(row=0, column=0, padx=15, sticky='w')
+        ttk.Button(self.menu_frame, text='Калькулятор',
+                   width=20,
+                   command=lambda: self.toggle_frames(2)).grid(row=1, column=0, padx=15, sticky='w')
+
+        '''
+        Кнопка инфо
+        '''
+        # self.info_button = ttk.Button(self.header, text='Инфо', command=self._toggle_info)
+        # self.info_button.pack(side="left")
+        #
+        # self.info_frame = tk.Frame(notebook, pady=10)
+        # self.info_visible = False
+        #
+        # self.info_frame.grid_columnconfigure(0, weight=1)
+        # self.info_frame.grid_columnconfigure(1, weight=1)
+        #
+        # ttk.Label(self.info_frame, text=f'App version: {CURRENT_VERSION}').grid(row=0, column=0, padx=15)
+        # ttk.Label(self.info_frame, text='created by zondar__').grid(row=1, column=0, padx=15)
+        # ttk.Button(self.info_frame, text='Обратная связь').grid(row=0, column=1, padx=15)
+
+        self.main_window.bind("<Button-1>", self.hide_frame_on_click)
+
+    def _toggle_menu(self):
+        if self.menu_visible:
+            self.menu_frame.pack_forget()
+        else:
+            # if self.info_visible:
+            #     self.info_frame.pack_forget()
+            #     self.info_visible = not self.info_visible
+            self.menu_frame.pack(fill='x', side='bottom')
+        self.menu_visible = not self.menu_visible
+
+    # def _toggle_info(self):
+    #     if self.info_visible:
+    #         self.info_frame.pack_forget()
+    #     else:
+    #         if self.menu_visible:
+    #             self.menu_frame.pack_forget()
+    #             self.menu_visible = not self.menu_visible
+    #         self.info_frame.pack(fill='x', side='bottom')
+    #     self.info_visible = not self.info_visible
+
+    def hide_frame_on_click(self, event):
+        """Скрывает фрейм при клике вне его области"""
+        clicked_widget = event.widget.winfo_containing(event.x_root, event.y_root)
+
+        if (clicked_widget != self.menu_button and clicked_widget not in self.menu_frame.winfo_children() +
+                [self.menu_frame]):
+            if self.menu_visible:
+                self.menu_frame.pack_forget()
+                self.menu_visible = not self.menu_visible
 
