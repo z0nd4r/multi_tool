@@ -12,7 +12,7 @@ from tkinter import messagebox
 
 GITHUB_API = "https://api.github.com/repos/z0nd4r/multi_tool/releases/latest"
 CURRENT_VERSION = "2.0.0"
-LINK_TO_PROGRAMM = "https://github.com/z0nd4r/multi_tool/releases/latest"
+LINK_TO_PROGRAM = "https://github.com/z0nd4r/multi_tool/releases/latest"
 
 def update_app():
     try:
@@ -35,7 +35,7 @@ def update_app():
             )
 
             if response:
-                webbrowser.open_new(LINK_TO_PROGRAMM)
+                webbrowser.open_new(LINK_TO_PROGRAM)
             else:
                 return None
 

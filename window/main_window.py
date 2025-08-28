@@ -196,7 +196,7 @@ class MainWindow:
         '''
         Кнопка меню
         '''
-        self.menu_button = ttk.Button(self.header, text="≡ Меню", command=self._toggle_menu)
+        self.menu_button = ttk.Button(self.header, text="≡ Меню", command=self._toggle_menu, width=10)
         self.menu_button.pack(side="left")
 
         self.menu_frame = tk.Frame(self.main_window, pady=10)

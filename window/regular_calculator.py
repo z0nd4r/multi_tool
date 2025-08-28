@@ -197,8 +197,8 @@ class RegularCalculator:
             return False
         elif re.search(r"[+\-*/.]{2,}", newval):  # ищет два или более операторов подряд
             return False
-        elif re.search(r"\d{" + str(11) + ",}", newval):  # ищет последовательность цифр длиннее 11
-            return False
+        # elif re.search(r"\d{" + str(11) + ",}", newval):  # ищет последовательность цифр длиннее 11
+        #     return False
         return re.match(r'^[\d+\-*/.]*$', newval) is not None
 
 
