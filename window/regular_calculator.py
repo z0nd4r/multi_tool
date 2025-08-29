@@ -15,7 +15,7 @@ class RegularCalculator:
                         [4, 5, 6, '*'],
                         [1, 2, 3, '-'],
                         ['.', 0, '=', '+'],
-                        ['C', '<--', 'ист']]
+                        ['C', '<--', 'e', 'ист']]
 
         self.history = []
         self.history_listbox = None  # пока нет окна
@@ -43,7 +43,7 @@ class RegularCalculator:
         self.number_entry_1.pack()
 
         self.buttons_frame = ttk.Frame(self.main_frame)
-        self.buttons_frame.pack()
+        self.buttons_frame.pack(pady=10)
 
         s = ttk.Style()
         s.configure('b.TButton',
@@ -130,12 +130,19 @@ class RegularCalculator:
         if value_of_button == 'ист' and self.history_window_visible is False:
             self._show_history_window()
 
-        if text:
-            if text[-1] in '+-/*' and '+-/*' in text[0, len(text) - 1]:
-                self.number_entry_1.delete(len(text) - 1, END)
+        if type(value_of_button) != int and value_of_button in '+-/*':
+            if text:
                 text = self.number_entry_1.get()
-                self._result(text, value_of_button)
+                if ('+' in text[0 : len(text)]
+                        or '-' in text[0 : len(text)]
+                        or '*' in text[0 : len(text)]
+                        or '/' in text[0 : len(text)]) and text[-1] not in '+-/*' and text[-1] != 'e':
+                    self._result(text, value_of_button)
+                elif text[-1] in '+-/*':
+                    self.number_entry_1.delete(len(text) - 1, END)
+                    self.number_entry_1.insert(tk.END, value_of_button)
 
+        if text:
             if value_of_button == '=':
                 if text[-1] in '+-/*.':
                     self.number_entry_1.delete(len(text)-1, END)
