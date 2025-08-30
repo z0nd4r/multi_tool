@@ -199,7 +199,11 @@ class MainWindow:
         self.menu_button = ttk.Button(self.header, text="≡ Меню", command=self._toggle_menu, width=10)
         self.menu_button.pack(side="left")
 
-        self.menu_frame = tk.Frame(self.main_window, pady=10)
+        self.menu_frame = tk.Frame(self.main_window,
+                                   width=5,
+                                   pady=10,
+                                   relief='groove',
+                                   borderwidth=2)
         self.menu_visible = False
 
         # ttk.Button(self.menu_frame, text='Конвертер').pack(fill='x', side='left')
@@ -214,6 +218,9 @@ class MainWindow:
         ttk.Button(self.menu_frame, text='Калькулятор',
                    width=20,
                    command=lambda: self.toggle_frames(2)).grid(row=1, column=0, padx=15, sticky='w')
+        ttk.Button(self.menu_frame, text='Скоро..',
+                   width=20,
+                   command=lambda: self.toggle_frames(3)).grid(row=2, column=0, padx=15, sticky='w')
 
         '''
         Кнопка инфо
@@ -240,7 +247,7 @@ class MainWindow:
             # if self.info_visible:
             #     self.info_frame.pack_forget()
             #     self.info_visible = not self.info_visible
-            self.menu_frame.pack(fill='x', side='bottom')
+            self.menu_frame.pack(side='bottom', anchor='sw')
         self.menu_visible = not self.menu_visible
 
     # def _toggle_info(self):
