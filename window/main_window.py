@@ -53,9 +53,10 @@ class MainWindow:
 
         self._build_main_menu()
 
+        self._build_tools_frames()
+
         self._build_menu()
 
-        self._build_tools_frames()
         self._build_converter_frame()
         self._build_calculator_frame()
 
@@ -199,8 +200,13 @@ class MainWindow:
         self.menu_button = ttk.Button(self.header, text="≡ Меню", command=self._toggle_menu, width=10)
         self.menu_button.pack(side="left")
 
-        self.menu_frame = tk.Frame(self.main_window,
-                                   width=5,
+        parent = self.main_window
+        if self.frame_1_visible:
+            parent = self.frame_1
+        elif self.frame_2_visible:
+            parent = self.frame_2
+
+        self.menu_frame = tk.Frame(parent,
                                    pady=10,
                                    relief='groove',
                                    borderwidth=2)
@@ -242,12 +248,12 @@ class MainWindow:
 
     def _toggle_menu(self):
         if self.menu_visible:
-            self.menu_frame.pack_forget()
+            self.menu_frame.place_forget()
         else:
             # if self.info_visible:
             #     self.info_frame.pack_forget()
             #     self.info_visible = not self.info_visible
-            self.menu_frame.pack(side='bottom', anchor='sw')
+            self.menu_frame.place(x=0, y=370)
         self.menu_visible = not self.menu_visible
 
     # def _toggle_info(self):
@@ -267,6 +273,6 @@ class MainWindow:
         if (clicked_widget != self.menu_button and clicked_widget not in self.menu_frame.winfo_children() +
                 [self.menu_frame]):
             if self.menu_visible:
-                self.menu_frame.pack_forget()
+                self.menu_frame.place_forget()
                 self.menu_visible = not self.menu_visible
 
