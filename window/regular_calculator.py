@@ -130,15 +130,17 @@ class RegularCalculator:
         if value_of_button == 'ист' and self.history_window_visible is False:
             self._show_history_window()
 
+        # проверка, нажата ли сейчас кнопка знака и написаны ли уже два числа, если написаны
+        # то нужно выполнить над ними действие, а после уже написать новый знак, чтобы не получался длинный пример
         if type(value_of_button) != int and value_of_button in '+-/*':
             if text:
                 text = self.number_entry_1.get()
-                if ('+' in text[0 : len(text)]
-                        or '-' in text[0 : len(text)]
-                        or '*' in text[0 : len(text)]
-                        or '/' in text[0 : len(text)]) and text[-1] not in '+-/*' and text[-1] != 'e':
+                if ('+' in text[0:len(text)]
+                        or '-' in text[0:len(text)]
+                        or '*' in text[0:len(text)]
+                        or '/' in text[0:len(text)]) and text[-1] not in '+-/*' and text[-1] != 'e':
                     self._result(text, value_of_button)
-                elif text[-1] in '+-/*':
+                elif text[-1] in '+-/*': # если в конце есть знак, а мы нажимаем на новый, то первый меняется на новый
                     self.number_entry_1.delete(len(text) - 1, END)
                     self.number_entry_1.insert(tk.END, value_of_button)
 
@@ -174,12 +176,13 @@ class RegularCalculator:
             result = 'Ошибка'
             messagebox.showerror("Ошибка", f'{e}')
 
-        self.number_entry_1.delete(0, tk.END)
-        self.number_entry_1.insert(0, str(result)+dop)
+        self.number_entry_1.delete(0, tk.END) # очищаем
+        self.number_entry_1.insert(0, str(result)+dop) # вставляем результат и знак, если он есть
 
         # if len(str(result)) > 20:
         #     self.expand_entry()
 
+        # текст для истории
         record = f"{text} = {result}"
         self.history.append(record)
 
@@ -204,7 +207,7 @@ class RegularCalculator:
             return False
         elif re.search(r"\d{" + str(13) + ",}", newval):  # ищет последовательность цифр длиннее 13
             return False
-        return re.match(r'^[\d+\-*/.eg]*$', newval) is not None
+        return re.match(r'^[\d+\-*/.e]*$', newval) is not None # разрешенные символы
 
     # расширение виджета для чисел по мере их написания
     # def expand_entry(self):
