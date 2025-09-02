@@ -253,7 +253,10 @@ class MainWindow:
             # if self.info_visible:
             #     self.info_frame.pack_forget()
             #     self.info_visible = not self.info_visible
-            self.menu_frame.place(x=0, y=370)
+            if platform.system() == 'Windows':
+                self.menu_frame.place(x=0, y=370)
+            else:
+                self.menu_frame.place(x=0, y=299)
         self.menu_visible = not self.menu_visible
 
     # def _toggle_info(self):
