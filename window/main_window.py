@@ -246,6 +246,7 @@ class MainWindow:
 
         self.main_window.bind("<Button-1>", self.hide_frame_on_click)
 
+    # показать/скрыть меню
     def _toggle_menu(self):
         if self.menu_visible:
             self.menu_frame.place_forget()
