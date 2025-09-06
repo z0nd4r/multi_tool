@@ -20,6 +20,11 @@ class RegularCalculator:
         self.history = []
         self.history_listbox = None  # пока нет окна
 
+        if os.path.exists("history.txt"):
+            with open("history.txt", "r", encoding='utf-8') as f:
+                for line in f.readlines():
+                    self.history.append(line.rstrip('\n'))
+
         self.check_1 = (self.root.register(self.is_valid_1), "%P")
 
         self._create_interface()
@@ -112,8 +117,8 @@ class RegularCalculator:
             print("Основное окно закрыто")
             self.main.destroy() # закрыть основное окно
             # self.history_window.destroy() # закрыть меню истории
-            self.history_listbox = None
-            self.history_window_visible = False
+            # self.history_listbox = None
+            # self.history_window_visible = False
             if os.path.exists("history.txt"):
                 os.remove("history.txt")
 
