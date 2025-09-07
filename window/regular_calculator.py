@@ -73,17 +73,29 @@ class RegularCalculator:
         self.history_window = tk.Toplevel(self.root)
         self.history_window.title("История вычислений")
 
-        self.ws = self.history_window.winfo_screenwidth()
-        self.hs = self.history_window.winfo_screenheight()
+        width_history_window = 300
+        height_history_window = 300
 
-        self.width = 300
-        self.height = 300
+        def center_history_window():
+            self.main.update_idletasks() # обновляет только отложенные задачи интерфейса (например, пересчёт геометрии)
+            root_x = self.main.winfo_rootx()
+            root_y = self.main.winfo_rooty()
+            root_w = self.main.winfo_width()
+            root_h = self.main.winfo_height()
 
-        x = (self.ws / 1.4) - (self.width / 2)
-        y = (self.hs / 2) - (self.height / 2)
+            pos_x = root_x + (root_w // 2.08) - (width_history_window // 2)
+            pos_y = root_y + (root_h // 2) - (height_history_window // 2)
 
-        self.history_window.geometry('%dx%d+%d+%d' % (self.width, self.height, x, y)) # история справа от основного окна
-        self.history_window.minsize(self.width, self.height)
+            self.history_window.geometry('%dx%d+%d+%d' % (width_history_window, height_history_window, pos_x, pos_y))
+            self.history_window.minsize(width_history_window, height_history_window)
+
+        center_history_window()
+
+        def track_main_window():
+            center_history_window()
+            self.history_window.after(100, center_history_window)
+
+        track_main_window()
 
         self.history_frame = ttk.Frame(self.history_window)
         self.history_frame.pack()

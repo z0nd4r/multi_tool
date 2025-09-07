@@ -168,9 +168,8 @@ class MainWindow:
         self.info = tk.Toplevel()
         self.info.title("О программе")
         self.info.resizable(False, False)
-
-        ws = self.info.winfo_screenwidth()
-        hs = self.info.winfo_screenheight()
+        self.info.grab_set()
+        self.info.attributes("-topmost", True)
 
         # размер окна в зависимости от ос
         if platform.system() == 'Windows':
@@ -181,11 +180,27 @@ class MainWindow:
             width_info_window = 340
             height_info_window = 150
 
-        x = (ws / 1.4) - (width_info_window / 2)
-        y = (hs / 2) - (height_info_window / 2)
+        # центрируем окно относительно главного окна
+        def center_info_window():
+            self.main_window.update_idletasks() # обновляет только отложенные задачи интерфейса (например, пересчёт геометрии)
+            root_x = self.main_window.winfo_rootx()
+            root_y = self.main_window.winfo_rooty()
+            root_w = self.main_window.winfo_width()
+            root_h = self.main_window.winfo_height()
 
-        self.info.geometry('%dx%d+%d+%d' % (width_info_window, height_info_window, x, y))
-        self.info.minsize(width_info_window, height_info_window)
+            pos_x = root_x + (root_w // 2.08) - (width_info_window // 2)
+            pos_y = root_y + (root_h // 2) - (height_info_window // 2)
+
+            self.info.geometry('%dx%d+%d+%d' % (width_info_window, height_info_window, pos_x, pos_y))
+
+        center_info_window()
+
+        # постоянно обновляем положение основного окна для центрирования информационного окна
+        def track_main_window():
+            center_info_window()
+            self.info.after(100, center_info_window)
+
+        track_main_window()
 
         ttk.Label(self.info,
                   text=f'App version: {CURRENT_VERSION}').grid(row=0, column=0, columnspan=2, pady=5)
