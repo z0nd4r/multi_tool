@@ -181,10 +181,10 @@ class MainWindow:
             width_info_window = 340
             height_info_window = 150
 
-        x = (ws / 2) - (width_info_window / 2)
+        x = (ws / 1.4) - (width_info_window / 2)
         y = (hs / 2) - (height_info_window / 2)
 
-        self.info.geometry('%dx%d+%d+%d' % (width_info_window, height_info_window, x, y)) # история справа от основного окна
+        self.info.geometry('%dx%d+%d+%d' % (width_info_window, height_info_window, x, y))
         self.info.minsize(width_info_window, height_info_window)
 
         ttk.Label(self.info,
