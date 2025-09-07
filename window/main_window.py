@@ -169,7 +169,50 @@ class MainWindow:
         style.configure("TCombobox", padding=5)
 
     def _check_info(self):
-        messagebox.showinfo('О программе', f'App version: {CURRENT_VERSION}\ncreated by zondar__')
+        # self.label_email = ttk.Label(text='zondar.multi.tool@yandex.ru')
+        #
+        # messagebox.showinfo('О программе', f'App version: {CURRENT_VERSION}\ncreated by zondar__'
+        #                                    f'\nОбратная связь: {self.label_email}')
+
+        self.info = tk.Toplevel()
+        self.info.title("О программе")
+        self.info.geometry("345x100")
+        self.info.resizable(False, False)
+
+        # центрируем
+        self.info.transient(self.info.master)
+        self.info.grab_set()
+
+        ttk.Label(self.info,
+                  text=f'App version: {CURRENT_VERSION}').grid(row=0, column=0, columnspan=2, pady=5)
+        ttk.Label(self.info,
+                  text=f'created by zondar__').grid(row=1, column=0, columnspan=2, pady=5)
+        ttk.Label(self.info,
+                  text=f'Обратная связь:').grid(row=2, column=0, pady=5, padx=(10, 1))
+
+        self.email_label = tk.Label(self.info,
+                                    text="zondar.multi.tool@yandex.ru",
+                                    width=25,
+                                    justify='center',
+                                    cursor='hand2',
+                                    relief='flat',
+                                    font=self.default_font)
+        self.email_label.grid(row=2, column=1, pady=5, padx=(1, 10))
+
+        def copy_email(event):
+            self.email_label.clipboard_clear()
+            self.email_label.clipboard_append('zondar.multi.tool@yandex.ru')
+            self.email_label.update()
+
+            # визуальное подтверждение
+            original_bg = self.email_label.cget("bg")
+            self.email_label.config(bg="#d4edda", text="✓ Скопировано!")
+
+            # Возвращаем обратно через 1.5 секунды
+            self.info.after(1500, lambda: self.email_label.config(bg=original_bg,
+                                                                  text="zondar.multi.tool@yandex.ru"))
+
+        self.email_label.bind("<Button-1>", copy_email)
 
     def toggle_frames(self, frame):
         if frame == 1 and not self.frame_1_visible:
