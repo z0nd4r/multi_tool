@@ -35,7 +35,7 @@ class MainWindow:
         self.ws = self.main_window.winfo_screenwidth()
         self.hs = self.main_window.winfo_screenheight()
 
-        # Инициализация окна
+        # инициализация окна
         self._build_main_window()
 
         # Menu(self.main_window)
@@ -84,19 +84,14 @@ class MainWindow:
 
         self.main_window.config(menu=self.main_menu)
 
-    # создание вкладок
+    # создание фреймов с инструментами
     def _build_tools_frames(self):
-        # self.notebook = ttk.Notebook(self.main_window)
-        # self.notebook.pack(fill='both', expand=True)
 
         self.frame_1 = ttk.Frame(self.main_window)
         self.frame_2 = ttk.Frame(self.main_window)
 
         self.frame_1_visible = False
         self.frame_2_visible = False
-
-        # self.notebook.add(self.frame_1, text="Конвертер")
-        # self.notebook.add(self.frame_2, text="Калькулятор")
 
     # выпадающий список
     def _build_combo(self, frame_top, values, value, frame_down):
@@ -168,20 +163,29 @@ class MainWindow:
         style.configure("TLabel", font=self.default_font)
         style.configure("TCombobox", padding=5)
 
+    # окно информации о программе с обратной связью
     def _check_info(self):
-        # self.label_email = ttk.Label(text='zondar.multi.tool@yandex.ru')
-        #
-        # messagebox.showinfo('О программе', f'App version: {CURRENT_VERSION}\ncreated by zondar__'
-        #                                    f'\nОбратная связь: {self.label_email}')
-
         self.info = tk.Toplevel()
         self.info.title("О программе")
-        self.info.geometry("345x100")
         self.info.resizable(False, False)
 
-        # центрируем
-        self.info.transient(self.info.master)
-        self.info.grab_set()
+        ws = self.info.winfo_screenwidth()
+        hs = self.info.winfo_screenheight()
+
+        # размер окна в зависимости от ос
+        if platform.system() == 'Windows':
+            ctypes.windll.shcore.SetProcessDpiAwareness(2)
+            width_info_window = 440
+            height_info_window = 150
+        else:
+            width_info_window = 340
+            height_info_window = 150
+
+        x = (ws / 2) - (width_info_window / 2)
+        y = (hs / 2) - (height_info_window / 2)
+
+        self.info.geometry('%dx%d+%d+%d' % (width_info_window, height_info_window, x, y)) # история справа от основного окна
+        self.info.minsize(width_info_window, height_info_window)
 
         ttk.Label(self.info,
                   text=f'App version: {CURRENT_VERSION}').grid(row=0, column=0, columnspan=2, pady=5)
@@ -199,6 +203,7 @@ class MainWindow:
                                     font=self.default_font)
         self.email_label.grid(row=2, column=1, pady=5, padx=(1, 10))
 
+        # возможность скопировать почту
         def copy_email(event):
             self.email_label.clipboard_clear()
             self.email_label.clipboard_append('zondar.multi.tool@yandex.ru')
@@ -214,6 +219,7 @@ class MainWindow:
 
         self.email_label.bind("<Button-1>", copy_email)
 
+    # показать/скрыть фреймы с инструментами
     def toggle_frames(self, frame):
         if frame == 1 and not self.frame_1_visible:
             if self.frame_2_visible:
@@ -231,6 +237,7 @@ class MainWindow:
             self.selected_tab_index = 2
             self.frame_2_visible = not self.frame_2_visible
 
+    # создание меню с выбором инструментов
     def _build_menu(self):
         self.header = tk.Frame(self.main_window, height=50)
         self.header.pack(fill="x", side='bottom')
@@ -254,12 +261,6 @@ class MainWindow:
                                    relief='groove',
                                    borderwidth=2)
         self.menu_visible = False
-
-        # ttk.Button(self.menu_frame, text='Конвертер').pack(fill='x', side='left')
-        # ttk.Button(self.menu_frame, text='Калькулятор').pack(fill='x', side='bottom')
-
-        # self.menu_frame.grid_columnconfigure(0, weight=1)
-        # self.menu_frame.grid_columnconfigure(1, weight=1)
 
         ttk.Button(self.menu_frame, text='Конвертер',
                    width=20,
@@ -289,29 +290,16 @@ class MainWindow:
 
         self.main_window.bind("<Button-1>", self.hide_frame_on_click)
 
-    # показать/скрыть меню
+    # показать/скрыть меню с инструментами
     def _toggle_menu(self):
         if self.menu_visible:
             self.menu_frame.place_forget()
         else:
-            # if self.info_visible:
-            #     self.info_frame.pack_forget()
-            #     self.info_visible = not self.info_visible
             if platform.system() == 'Windows':
                 self.menu_frame.place(x=0, y=370)
             else:
                 self.menu_frame.place(x=0, y=299)
         self.menu_visible = not self.menu_visible
-
-    # def _toggle_info(self):
-    #     if self.info_visible:
-    #         self.info_frame.pack_forget()
-    #     else:
-    #         if self.menu_visible:
-    #             self.menu_frame.pack_forget()
-    #             self.menu_visible = not self.menu_visible
-    #         self.info_frame.pack(fill='x', side='bottom')
-    #     self.info_visible = not self.info_visible
 
     def hide_frame_on_click(self, event):
         """Скрывает фрейм при клике вне его области"""
