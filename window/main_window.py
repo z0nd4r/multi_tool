@@ -87,11 +87,11 @@ class MainWindow:
     # создание фреймов с инструментами
     def _build_tools_frames(self):
 
-        self.frame_1 = ttk.Frame(self.main_window)
-        self.frame_2 = ttk.Frame(self.main_window)
+        self.converters_main_frame = ttk.Frame(self.main_window)
+        self.calculators_main_frame = ttk.Frame(self.main_window)
 
-        self.frame_1_visible = False
-        self.frame_2_visible = False
+        self.converters_main_frame_visible = False
+        self.calculators_main_frame_visible = False
 
     # выпадающий список
     def _build_combo(self, frame_top, values, value, frame_down):
@@ -113,12 +113,12 @@ class MainWindow:
     def _build_combo_converter(self):
         values = ["Изображения", "Текстовые файлы"]
         value = 1
-        self.combo_converter = self._build_combo(self.frame_1, values, value, self.converter_frame)
+        self.combo_converter = self._build_combo(self.converters_main_frame, values, value, self.converter_frame)
 
     def _build_combo_calculator(self):
         values = ["Обычный", "Системы счисления"]
         value = 0
-        self.combo_calculator = self._build_combo(self.frame_2, values, value, self.calculator_frame)
+        self.combo_calculator = self._build_combo(self.calculators_main_frame, values, value, self.calculator_frame)
 
     def on_focus_in(self, event, value):
         if self.combo.get() == value:
@@ -131,11 +131,11 @@ class MainWindow:
             self.combo.config(foreground="grey")
 
     def _build_converter_frame(self):
-        self.converter_frame = ttk.Frame(self.frame_1)
+        self.converter_frame = ttk.Frame(self.converters_main_frame)
         self.converter_frame.pack(side='bottom', fill="both", expand=True)
 
     def _build_calculator_frame(self):
-        self.calculator_frame = ttk.Frame(self.frame_2)
+        self.calculator_frame = ttk.Frame(self.calculators_main_frame)
         self.calculator_frame.pack(side='bottom', fill="both", expand=True)
 
     def _on_change(self, event, frame):
@@ -236,21 +236,21 @@ class MainWindow:
 
     # показать/скрыть фреймы с инструментами
     def toggle_frames(self, frame):
-        if frame == 1 and not self.frame_1_visible:
-            if self.frame_2_visible:
-                self.frame_2.pack_forget()
-                self.frame_2_visible = not self.frame_2_visible
-            self.frame_1.pack(fill='both', expand=True)
+        if frame == 1 and not self.converters_main_frame_visible:
+            if self.calculators_main_frame_visible:
+                self.calculators_main_frame.pack_forget()
+                self.calculators_main_frame_visible = not self.calculators_main_frame_visible
+            self.converters_main_frame.pack(fill='both', expand=True)
             self.selected_tab_index = 1
-            self.frame_1_visible = not self.frame_1_visible
+            self.converters_main_frame_visible = not self.converters_main_frame_visible
 
-        elif frame == 2 and not self.frame_2_visible:
-            if self.frame_1_visible:
-                self.frame_1.pack_forget()
-                self.frame_1_visible = not self.frame_1_visible
-            self.frame_2.pack(fill='both', expand=True)
+        elif frame == 2 and not self.calculators_main_frame_visible:
+            if self.converters_main_frame_visible:
+                self.converters_main_frame.pack_forget()
+                self.converters_main_frame_visible = not self.converters_main_frame_visible
+            self.calculators_main_frame.pack(fill='both', expand=True)
             self.selected_tab_index = 2
-            self.frame_2_visible = not self.frame_2_visible
+            self.calculators_main_frame_visible = not self.calculators_main_frame_visible
 
     # создание меню с выбором инструментов
     def _build_menu(self):
@@ -266,10 +266,10 @@ class MainWindow:
         self.menu_button.pack(side="left")
 
         parent = self.main_window
-        if self.frame_1_visible:
-            parent = self.frame_1
-        elif self.frame_2_visible:
-            parent = self.frame_2
+        if self.converters_main_frame_visible:
+            parent = self.converters_main_frame
+        elif self.calculators_main_frame_visible:
+            parent = self.calculators_main_frame
 
         self.menu_frame = tk.Frame(parent,
                                    pady=10,
@@ -283,7 +283,7 @@ class MainWindow:
         ttk.Button(self.menu_frame, text='Калькулятор',
                    width=20,
                    command=lambda: self.toggle_frames(2)).grid(row=1, column=0, padx=15, sticky='w')
-        ttk.Button(self.menu_frame, text='Скоро..',
+        ttk.Button(self.menu_frame, text='Практичные мелочи',
                    width=20,
                    command=lambda: self.toggle_frames(3)).grid(row=2, column=0, padx=15, sticky='w')
 
