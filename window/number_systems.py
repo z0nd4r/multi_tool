@@ -24,7 +24,9 @@ class NumberSystems:
         self.frame_1.pack(fill='x')
 
         ttk.Label(self.frame_1, text="Перевести число").pack()
-        self.number_entry_1 = ttk.Entry(self.frame_1)
+        self.number_entry_1 = ttk.Entry(self.frame_1,
+                                        validate='key',
+                                        validatecommand=check_1)
         self.number_entry_1.pack()
 
         ttk.Label(self.frame_1, text="из").pack()
