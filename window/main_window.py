@@ -3,7 +3,7 @@ import tkinter.font as font
 from tkinter import ttk, messagebox
 
 from check_version import CURRENT_VERSION, update_app
-from . import NumberSystems, ImageConverter, RegularCalculator, TextFileConverter
+from . import NumberSystems, ImageConverter, RegularCalculator, TextFileConverter, RandomNumberGenerator
 
 import ctypes
 import platform
@@ -14,6 +14,8 @@ class MainWindow:
         self.main_window = tk.Tk()
 
         self.main_window.tk.call('tk', 'scaling', 2)
+
+        self.main_window.resizable(False, False)
 
         self.default_font = font.nametofont("TkDefaultFont")
 
@@ -59,9 +61,11 @@ class MainWindow:
 
         self._build_converter_frame()
         self._build_calculator_frame()
+        self._build_little_things_frame()
 
         self._build_combo_converter()
         self._build_combo_calculator()
+        self._build_combo_little_things()
 
         self._build_style()
 
@@ -89,9 +93,11 @@ class MainWindow:
 
         self.converters_main_frame = ttk.Frame(self.main_window)
         self.calculators_main_frame = ttk.Frame(self.main_window)
+        self.little_things_main_frame = ttk.Frame(self.main_window)
 
         self.converters_main_frame_visible = False
         self.calculators_main_frame_visible = False
+        self.little_things_main_frame_visible = False
 
     # выпадающий список
     def _build_combo(self, frame_top, values, value, frame_down):
@@ -100,6 +106,8 @@ class MainWindow:
             self.combo.set('Выберите калькулятор')  # Плейсхолдер
         elif value == 1:
             self.combo.set('Выберите конвертер')  # Плейсхолдер
+        elif value == 2:
+            self.combo.set('Выберите нужный инструмент')
 
         self.combo.config(foreground="black")
 
@@ -120,6 +128,11 @@ class MainWindow:
         value = 0
         self.combo_calculator = self._build_combo(self.calculators_main_frame, values, value, self.calculator_frame)
 
+    def _build_combo_little_things(self):
+        values = ["Генератор случайных чисел", "Бросок монеты/кубика"]
+        value = 2
+        self.combo_little_things = self._build_combo(self.little_things_main_frame, values, value, self.little_things_frame)
+
     def on_focus_in(self, event, value):
         if self.combo.get() == value:
             self.combo.delete(0, "end")
@@ -138,6 +151,10 @@ class MainWindow:
         self.calculator_frame = ttk.Frame(self.calculators_main_frame)
         self.calculator_frame.pack(side='bottom', fill="both", expand=True)
 
+    def _build_little_things_frame(self):
+        self.little_things_frame = ttk.Frame(self.little_things_main_frame)
+        self.little_things_frame.pack(side='bottom', fill="both", expand=True)
+
     def _on_change(self, event, frame):
         for widget in frame.winfo_children():
             widget.destroy()
@@ -146,6 +163,8 @@ class MainWindow:
             combo = self.combo_converter
         elif self.selected_tab_index == 2:
             combo = self.combo_calculator
+        elif self.selected_tab_index == 3:
+            combo = self.combo_little_things
 
         choice = combo.get()
         # print(choice)
@@ -157,6 +176,11 @@ class MainWindow:
             TextFileConverter(self.converter_frame)
         elif choice == "Изображения":
             ImageConverter(self.converter_frame)
+        elif choice == "Генератор случайных чисел":
+            RandomNumberGenerator(self.little_things_frame)
+        elif choice == "Бросок монеты/кубика":
+            print('Бросок монеты/кубика')
+            pass
 
     def _build_style(self):
         style = ttk.Style()
@@ -240,6 +264,9 @@ class MainWindow:
             if self.calculators_main_frame_visible:
                 self.calculators_main_frame.pack_forget()
                 self.calculators_main_frame_visible = not self.calculators_main_frame_visible
+            if self.little_things_main_frame_visible:
+                self.little_things_main_frame.pack_forget()
+                self.little_things_main_frame_visible = not self.little_things_main_frame_visible
             self.converters_main_frame.pack(fill='both', expand=True)
             self.selected_tab_index = 1
             self.converters_main_frame_visible = not self.converters_main_frame_visible
@@ -248,9 +275,23 @@ class MainWindow:
             if self.converters_main_frame_visible:
                 self.converters_main_frame.pack_forget()
                 self.converters_main_frame_visible = not self.converters_main_frame_visible
+            if self.little_things_main_frame_visible:
+                self.little_things_main_frame.pack_forget()
+                self.little_things_main_frame_visible = not self.little_things_main_frame_visible
             self.calculators_main_frame.pack(fill='both', expand=True)
             self.selected_tab_index = 2
             self.calculators_main_frame_visible = not self.calculators_main_frame_visible
+
+        elif frame == 3 and not self.little_things_main_frame_visible:
+            if self.calculators_main_frame_visible:
+                self.calculators_main_frame.pack_forget()
+                self.calculators_main_frame_visible = not self.calculators_main_frame_visible
+            if self.converters_main_frame_visible:
+                self.converters_main_frame.pack_forget()
+                self.converters_main_frame_visible = not self.converters_main_frame_visible
+            self.little_things_main_frame.pack(fill='both', expand=True)
+            self.selected_tab_index = 3
+            self.little_things_main_frame_visible = not self.little_things_main_frame_visible
 
     # создание меню с выбором инструментов
     def _build_menu(self):
@@ -270,6 +311,8 @@ class MainWindow:
             parent = self.converters_main_frame
         elif self.calculators_main_frame_visible:
             parent = self.calculators_main_frame
+        elif self.little_things_main_frame_visible:
+            parent = self.little_things_main_frame
 
         self.menu_frame = tk.Frame(parent,
                                    pady=10,
