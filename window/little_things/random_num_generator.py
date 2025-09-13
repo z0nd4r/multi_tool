@@ -39,14 +39,14 @@ class RandomNumberGenerator:
                                                  value='range',
                                                  variable=self.type_of_range,
                                                  command=self._select_type_of_range)
-        self.radio_button_range.grid(row=3, column=2, pady=10, sticky='we')
+        self.radio_button_range.grid(row=3, column=2, pady=10, padx=(0, 5))
 
         self.radio_button_range = ttk.Radiobutton(self.root,
                                                  text='из списка',
                                                  value='list',
                                                  variable=self.type_of_range,
                                                  command=self._select_type_of_range)
-        self.radio_button_range.grid(row=3, column=3, pady=10, sticky='we')
+        self.radio_button_range.grid(row=3, column=3, pady=10)
 
         # self.label_range = ttk.Label(self.root, text='Диапазон:')
         # self.label_range.grid(row=3, column=1, columnspan=4, pady=10)
@@ -54,6 +54,7 @@ class RandomNumberGenerator:
         # фрейм для диапазона
         self.range_frame = ttk.Frame(self.root)
         self.range_frame.grid(row=4, column=1, columnspan=4, pady=10)
+        self.range_frame_visible = True
 
         self.label_range_of = ttk.Label(self.range_frame, text='от')
         self.label_range_of.grid(row=0, column=1, padx=(0, 5))
@@ -76,22 +77,31 @@ class RandomNumberGenerator:
         # фрейм для диапазона из списка
         self.range_list_frame = ttk.Frame(self.root)
         self.range_list_frame.grid(row=4, column=1, columnspan=4, pady=10)
+        self.range_list_frame_visible = False
 
         self.entry_list = ttk.Entry(self.range_list_frame)
         self.entry_list.grid(row=0, column=1)
-        self.label_list = ttk.Label(self.range_list_frame, text='напишите числа через запятую')
-        self.label_list.grid(row=2, column=1)
+        self.label_list = ttk.Label(self.range_list_frame, text='напишите числа через пробел')
+        self.label_list.grid(row=1, column=1)
 
+        self.range_list_frame.grid_remove() # убираем видимость фрейма, чтобы потом показать
 
-        self.range_list_frame.grid_remove()
-
+    # выводим результат
     def _show_generation_result(self):
         try:
-            of = int(self.entry_range_of.get())
-            to = int(self.entry_range_to.get())
+            if self.range_frame_visible:
+                of = int(self.entry_range_of.get())
+                to = int(self.entry_range_to.get())
 
-            result = get_random_num(of, to)
-            print(result)
+                result = get_random_num(None, of, to)
+                print(result)
+
+            elif self.range_list_frame_visible:
+                lst = self.entry_list.get()
+                print(type(lst))
+
+                result = get_random_num(lst)
+
 
             self.label_num.config(text=result)
         except ValueError:
@@ -100,11 +110,16 @@ class RandomNumberGenerator:
     def is_valid_1(self, newval):
         return re.match(r'^\d*$', newval) is not None
 
+    # показываем фрейм либо с диапазоном из двух чисел, либо со списком
     def _select_type_of_range(self):
         print(self.type_of_range.get())
         if self.type_of_range.get() == 'range':
             self.range_frame.grid()
             self.range_list_frame.grid_remove()
+            self.range_frame_visible = not self.range_frame_visible
+            self.range_list_frame_visible = not self.range_list_frame_visible
         elif self.type_of_range.get() == 'list':
             self.range_list_frame.grid()
             self.range_frame.grid_remove()
+            self.range_list_frame_visible = not self.range_list_frame_visible
+            self.range_frame_visible = not self.range_frame_visible
