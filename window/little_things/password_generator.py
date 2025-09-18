@@ -30,22 +30,23 @@ class PasswordGenerator:
         self.button = ttk.Button(self.root, text='Сгенерировать', command=self._show_generation_result)
         self.button.grid(row=1, column=1, columnspan=4, pady=5)
 
-        self.len_password_label = ttk.Label(self.root, text='Длина пароля:')
-        self.len_password_label.grid(row=2, column=2, pady=5, padx=3, sticky='e')
-
         self.len_password_entry = ttk.Entry(self.root,
-                                            width=5,
+                                            width=3,
                                             validate='key',
                                             validatecommand=check_1
                                             )
-        self.len_password_entry.grid(row=2, column=3, pady=5, padx=3, sticky='w')
+        self.len_password_entry.grid(row=2, column=2, pady=(15,5), padx=3, sticky='e')
         self.len_password_entry.insert(0, 10)
 
-        self.symbols_label = ttk.Label(self.root, text='Спецсимволы:')
-        self.symbols_label.grid(row=3, column=2, pady=5, padx=0, sticky='e')
+        self.len_password_label = ttk.Label(self.root, text='- длина пароля')
+        self.len_password_label.grid(row=2, column=3, pady=(15,5), padx=3, sticky='w')
 
-        self.symbols_checkbutton = tk.Checkbutton(self.root, variable=self.check_var)
-        self.symbols_checkbutton.grid(row=3, column=3, pady=5, padx=0, sticky='w')
+
+        # self.symbols_label = ttk.Label(self.root, text='Спецсимволы:')
+        # self.symbols_label.grid(row=3, column=2, pady=5, padx=0, sticky='e')
+
+        self.symbols_checkbutton = ttk.Checkbutton(self.root, text='спецсимволы', variable=self.check_var)
+        self.symbols_checkbutton.grid(row=3, column=1, columnspan=4, pady=5, padx=5)
 
         self.password_label.bind("<Button-1>", self._copy_password)
 
