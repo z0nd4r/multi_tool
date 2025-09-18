@@ -5,3 +5,4 @@ from .image_converter import ImageConverter
 from .text_file_converter import TextFileConverter
 
 from .little_things.random_num_generator import RandomNumberGenerator
+from .little_things.password_generator import PasswordGenerator

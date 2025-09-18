@@ -3,7 +3,12 @@ import tkinter.font as font
 from tkinter import ttk, messagebox
 
 from check_version import CURRENT_VERSION, update_app
-from . import NumberSystems, ImageConverter, RegularCalculator, TextFileConverter, RandomNumberGenerator
+from . import (NumberSystems,
+               ImageConverter,
+               RegularCalculator,
+               TextFileConverter,
+               RandomNumberGenerator,
+               PasswordGenerator)
 
 import ctypes
 import platform
@@ -129,7 +134,7 @@ class MainWindow:
         self.combo_calculator = self._build_combo(self.calculators_main_frame, values, value, self.calculator_frame)
 
     def _build_combo_little_things(self):
-        values = ["Генератор случайных чисел", "Бросок монеты/кубика"]
+        values = ["Генератор случайных чисел", "Генератор паролей"]
         value = 2
         self.combo_little_things = self._build_combo(self.little_things_main_frame, values, value, self.little_things_frame)
 
@@ -178,9 +183,8 @@ class MainWindow:
             ImageConverter(self.converter_frame)
         elif choice == "Генератор случайных чисел":
             RandomNumberGenerator(self.little_things_frame)
-        elif choice == "Бросок монеты/кубика":
-            print('Бросок монеты/кубика')
-            pass
+        elif choice == "Генератор паролей":
+            PasswordGenerator(self.little_things_frame)
 
     def _build_style(self):
         style = ttk.Style()
