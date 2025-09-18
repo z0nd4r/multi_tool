@@ -94,14 +94,14 @@ class RandomNumberGenerator:
                 to = int(self.entry_range_to.get())
 
                 result = get_random_num(None, of, to)
-                print(result)
 
             elif self.range_list_frame_visible:
                 lst = self.entry_list.get()
-                print(type(lst))
-
+                if len(lst) < 1:
+                    messagebox.showerror('Ошибка', 'Введите диапазон чисел')
+                    return
+                
                 result = get_random_num(lst)
-
 
             self.label_num.config(text=result)
         except ValueError:
