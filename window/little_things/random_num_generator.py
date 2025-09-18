@@ -20,12 +20,12 @@ class RandomNumberGenerator:
         self.root.columnconfigure(5, weight=1)  # правый отступ
 
         self.label_ran_num = ttk.Label(self.root, text='Случайное число:')
-        self.label_ran_num.grid(row=0, column=1, pady=10, columnspan=4)
+        self.label_ran_num.grid(row=0, column=2, pady=10, columnspan=2)
 
         self.label_num = ttk.Label(self.root,
                                    text='0',
                                    font=('Arial', 65))
-        self.label_num.grid(row=1, column=1, columnspan=4)
+        self.label_num.grid(row=1, column=2, columnspan=2)
 
         self.button = ttk.Button(self.root,
                                  text='Сгенерировать',
@@ -39,14 +39,14 @@ class RandomNumberGenerator:
                                                  value='range',
                                                  variable=self.type_of_range,
                                                  command=self._select_type_of_range)
-        self.radio_button_range.grid(row=3, column=2, pady=10, padx=(0, 5))
+        self.radio_button_range.grid(row=3, column=2, pady=10, padx=(0, 5), sticky='e')
 
         self.radio_button_range = ttk.Radiobutton(self.root,
                                                  text='из списка',
                                                  value='list',
                                                  variable=self.type_of_range,
                                                  command=self._select_type_of_range)
-        self.radio_button_range.grid(row=3, column=3, pady=10)
+        self.radio_button_range.grid(row=3, column=3, pady=10, sticky='w')
 
         # self.label_range = ttk.Label(self.root, text='Диапазон:')
         # self.label_range.grid(row=3, column=1, columnspan=4, pady=10)
