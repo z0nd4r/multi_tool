@@ -100,7 +100,7 @@ class RandomNumberGenerator:
                 if len(lst) < 1:
                     messagebox.showerror('Ошибка', 'Введите диапазон чисел')
                     return
-                
+
                 result = get_random_num(lst)
 
             self.label_num.config(text=result)
