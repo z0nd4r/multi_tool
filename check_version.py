@@ -11,7 +11,7 @@ from packaging import version
 from tkinter import messagebox
 
 GITHUB_API = "https://api.github.com/repos/z0nd4r/multi_tool/releases/latest"
-CURRENT_VERSION = "2.0.0"
+CURRENT_VERSION = "2.2.0"
 LINK_TO_PROGRAM = "https://github.com/z0nd4r/multi_tool/releases/latest"
 
 def update_app():
